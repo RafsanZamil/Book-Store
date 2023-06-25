@@ -1,0 +1,98 @@
+<nav>
+  <div class="navbar-container">
+    <div class="navbar-left">
+     
+      <ul>
+        <li><a href="/">Book Store</a></li> 
+        <li><a href="/category">Category</a></li>
+      </ul>
+    </div>
+    <div class="navbar-middle">
+      <form action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search books">
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+    <div class="navbar-right">
+      <ul>
+        <li><a href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Sign Up</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  
+  <style>
+    nav {
+  background-color: #605151;
+  padding: 25px;
+  text-align: center;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar-left ul,
+.navbar-right ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-middle form {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-middle input[type="text"] {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  width: 300px;
+  font-size: 18px;
+}
+
+.navbar-middle button {
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+li {
+  display: inline;
+  margin-right: 10px;
+}
+
+li a {
+  text-decoration: none;
+  color: #fff0f0;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+li a:hover {
+  background-color: #888888;
+  color: #ffffff;
+}
+
+.fa-shopping-cart {
+  margin-right: 13px;
+}
+
+
+
+  </style>
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
