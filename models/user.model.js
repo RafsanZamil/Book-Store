@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt")
-const encrypt= require("mongoose-encryption")
-const session = require('express-session');
-const passport = require("passport");
+
+
 const passportLocalMongoose = require("passport-local-mongoose");
-const config = require("../config/config");
+
 const findOrCreate = require('mongoose-findorcreate');
 
 const userSchema = mongoose.Schema({

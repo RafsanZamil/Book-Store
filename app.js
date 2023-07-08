@@ -13,6 +13,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
+//const isAdmin = require("./middlewares/auth");
 //const userRoute = require("./routes/user.route")
 // const secret = config.SECRET.secret;
 
@@ -67,13 +68,6 @@ function(accessToken, refreshToken, profile, cb) {
 
 
 
-//app.use("/", userRouter);
-
-// api/users : GET
-// api/users/:id : GET
-// api/users/ : POST
-// api/users/:id : PATCH
-// api/users/:id : DELETE
 
 app.get("/", function(req, res) {
  res.render("home");
@@ -102,7 +96,9 @@ app.get("/login",function(req,res){
 app.get("/register",function(req,res){
   res.render("register");
 })
-
+app.get("/user",function(req,res){
+  res.render("partials/user-navbar");
+})
 app.post("/register", function(req, res){
 
   User.register({username: req.body.username}, req.body.password, function(err, user){
@@ -117,23 +113,58 @@ app.post("/register", function(req, res){
   });
 
 });
-app.post("/login", function(req, res){
 
+//loggedin middlewared
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    // User is logged in
+    res.locals.loggedIn = true;
+  } else {
+    // User is not logged in
+    res.locals.loggedIn = false;
+  }
+  next();
+}
+
+app.post("/login", function(req, res) {
   const user = new User({
     username: req.body.username,
     password: req.body.password
   });
 
-  req.login(user, function(err){
+  req.login(user, function(err) {
     if (err) {
       console.log(err);
     } else {
-      passport.authenticate("local")(req, res, function(){
-        res.redirect("/secrets");
+      passport.authenticate("local")(req, res, function() {
+        if (req.user.isAdmin) {
+          res.redirect("/admin");
+        } else {
+          res.redirect("/user");
+        }
       });
     }
   });
+});
 
+// Protected route that only admin can access
+//is admin middleware
+function isAdmin(req, res, next) {
+  if (req.user && req.user.isAdmin) {
+    // User is an admin, allow access to the route
+    next();
+  } else {
+    // User is not an admin, redirect to an error page or display an error message
+    res.status(500).json({
+      message: "something broke",
+    });
+  }
+}
+
+//protected routes
+app.get("/admin", isAdmin, function(req, res) {
+  // Render admin panel view
+  res.render("partials/admin-navbar");
 });
 
 app.get("/secrets", function(req, res){
@@ -147,33 +178,6 @@ app.get("/secrets", function(req, res){
     }
   });
 });
-// app.get("/submit", function(req, res){
-//   if (req.isAuthenticated()){
-//     res.render("submit");
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
-
-// app.post("/submit", function(req, res){
-//   const submittedSecret = req.body.secret;
-
-// //Once the user is authenticated and their session gets saved, their user details are saved to req.user.
-//   // console.log(req.user.id);
-
-//   User.findById(req.user.id, function(err, foundUser){
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       if (foundUser) {
-//         foundUser.secret = submittedSecret;
-//         foundUser.save(function(){
-//           res.redirect("/secrets");
-//         });
-//       }
-//     }
-//   });
-// });
 
 
 app.get('/logout', function(req, res, next) {
@@ -188,32 +192,6 @@ app.get('/logout', function(req, res, next) {
 
 
 
-
-// app.post('/login',async (req, res) => {
-//   try {
-
-//       const username = req.body.email;
-//       const password = req.body.password;
-
-//       const userData = await User.findOne({ username: username });
-
-//       if (userData) {
-//           passport.authenticate("local")
-//             if(userData.isAdmin===false){
-//               res.redirect('/');
-//           }else{
-//               req.session.user_id = userData._id
-//               res.redirect("register")}
-//           }
-//       else {
-//           res.render('Login',{message:"email and pass is incorrect"})
-              
-//           }
-//       }
-//        catch (error) {
-//       console.log(error);
-//   }
-// })
 
 
 
