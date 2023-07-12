@@ -1,0 +1,134 @@
+
+ 
+
+<nav>
+  <div class="navbar-container">
+    <div class="navbar-left">
+     
+      <ul>
+        <li><a href="/admin">Book Store</a></li> 
+        <li><a href="/category">Category</a></li>
+      </ul>
+    </div>
+    <div class="navbar-middle">
+      <form action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search books">
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+    <div class="navbar-right">
+      <ul>
+        <li><a href="/admin/products"> Manage Products</a></li>
+        <li><a href="/admin/orders"> Manage Orders</a></li>
+        <li><a href="/logout">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  
+  <style>
+    nav {
+  background-color: #605151;
+  padding: 25px;
+  text-align: center;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar-left ul,
+.navbar-right ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-middle form {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-middle input[type="text"] {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  width: 300px;
+  font-size: 18px;
+}
+
+.navbar-middle button {
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+li {
+  display: inline;
+  margin-right: 10px;
+}
+
+li a {
+  text-decoration: none;
+  color: #fff0f0;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+li a:hover {
+  background-color: #888888;
+  color: #ffffff;
+}
+
+.fa-shopping-cart {
+  margin-right: 13px;
+}
+
+
+
+  </style>
+ 
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Product List</title>
+   <link rel="stylesheet" href="/css/style.css"> <!-- Adjust the path to your CSS file -->
+ </head>
+ <body>
+   <h1>Product List</h1>
+   <div class="product-container">
+    <% products.forEach((product) => { %>
+      <div class="product">
+        <h2><%= product.title %></h2>
+        <p><%= product.summary %></p>
+        <p>Price: $<%= product.price %></p>
+        <img src="<%= product.image.path %>" alt="Product Image">
+
+        
+           
+          <a href="/user/products/<%= product._id %>">View Details</a>
+        
+      </div>
+    <% }) %>
+  </div>
+ 
+   
+ </body>
+ </html>

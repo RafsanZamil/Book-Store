@@ -1,0 +1,84 @@
+<style>
+  h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  form {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+
+  input[type="text"] {
+    width: 300px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button[type="submit"] {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  div.book {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f5f5f5;
+  }
+
+  .book-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+  }
+
+  .book-review {
+    color: #555;
+    font-size: 14px;
+  }
+
+  /* Additional styles for book reviews background */
+  .book-review-bg {
+    background-color: #fafafa;
+    border-radius: 8px;
+    padding: 10px;
+  }
+</style>
+
+<h2>Reviews of Some Books</h2>
+<form action="/books" method="GET">
+  <div>
+    <label>Book Name</label>
+    <input type="text" name="title" value="<%= searchOptions.title %>">
+  </div>
+  
+  <button type="submit">Search</button>
+</form>
+
+<div>
+  <% books.forEach(book => { %>
+    <div class="book">
+      <div class="book-review-bg"> <!-- Added background for book review -->
+        <p class="book-name">Book Name: <%= book.title %></p>
+        <p class="book-review">Review: <%= book.description %></p>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+

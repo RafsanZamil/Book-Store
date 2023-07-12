@@ -1,9 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const ejs = require('ejs')
+const multer = require("multer");
+const path = require("path");
 
 const bodyParser = require("body-parser")
 const User = require("./models/user.model");
+const Product = require("./models/product.model");
 require("./config/db");
 const config =require("./config/config");
 const userSchema= require("./models/user.model")
@@ -17,16 +20,23 @@ const findOrCreate = require('mongoose-findorcreate');
 //const userRoute = require("./routes/user.route")
 // const secret = config.SECRET.secret;
 
+const bookRouter = require('./routes/books')
 
-
-const userRouter = require("./routes/user.route");
 
 const app = express();
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, '/public')));
+
+
+
 //app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use('/books', bookRouter)
+
 
 app.use(session({
   secret: "Our little secret.",
@@ -69,6 +79,7 @@ function(accessToken, refreshToken, profile, cb) {
 
 
 
+
 app.get("/", function(req, res) {
  res.render("home");
 });
@@ -84,9 +95,9 @@ app.get("/auth/google/secrets",
   });
 
 
-// //for admin route
-// const adminRoute = require('./routes/adminRoute')
-// app.use ('/admin',adminRoute)
+
+
+
 
 
 //user Routes
@@ -97,7 +108,9 @@ app.get("/register",function(req,res){
   res.render("register");
 })
 app.get("/user",function(req,res){
-  res.render("partials/user-navbar");
+  Product.find().then(function(products){
+    res.render("user/products/all-products", { products });
+  });  
 })
 app.post("/register", function(req, res){
 
@@ -113,18 +126,6 @@ app.post("/register", function(req, res){
   });
 
 });
-
-//loggedin middlewared
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    // User is logged in
-    res.locals.loggedIn = true;
-  } else {
-    // User is not logged in
-    res.locals.loggedIn = false;
-  }
-  next();
-}
 
 app.post("/login", function(req, res) {
   const user = new User({
@@ -147,6 +148,21 @@ app.post("/login", function(req, res) {
   });
 });
 
+//loggedin middlewared
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    // User is logged in
+    res.locals.loggedIn = true;
+  } else {
+    // User is not logged in
+    res.locals.loggedIn = false;
+  }
+  next();
+}
+
+
+//midlewares
+
 // Protected route that only admin can access
 //is admin middleware
 function isAdmin(req, res, next) {
@@ -156,16 +172,42 @@ function isAdmin(req, res, next) {
   } else {
     // User is not an admin, redirect to an error page or display an error message
     res.status(500).json({
-      message: "something broke",
+      message: "you are not admin",
     });
   }
 }
+//image-upload middleware
+// Storage configuration for Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/product-data/images"); // Specify the destination folder
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const extension = file.originalname.split(".").pop();
+    cb(null, file.fieldname + "-" + uniqueSuffix + "." + extension);
+ 
+  },
+});
+
+// Multer middleware setup
+const upload = multer({ storage: storage });
+
+// Example route for handling image upload
+app.post("/upload", upload.single("image"), (req, res) => {
+  // The uploaded image file is available in req.file
+  res.send("Image uploaded successfully!");
+});
+
+
+
 
 //protected routes
-app.get("/admin", isAdmin, function(req, res) {
-  // Render admin panel view
-  res.render("partials/admin-navbar");
-});
+// app.get("/admin", isAdmin, function(req, res) {
+//   // Render admin panel view
+//   res.render("partials/admin-navbar");
+// });
+
 
 app.get("/secrets", function(req, res){
   User.find({"secret": {$ne: null}}, function(err, foundUsers){
@@ -180,6 +222,7 @@ app.get("/secrets", function(req, res){
 });
 
 
+
 app.get('/logout', function(req, res, next) {
   req.logout(function(err) {
     if (err) { return next(err); }
@@ -188,11 +231,129 @@ app.get('/logout', function(req, res, next) {
 });
 
 
+//product routes
 
 
 
 
+ 
 
+
+
+
+const createNewProduct = async (req, res) => {
+  try {
+    const { title, summary, price } = req.body;
+    const { data, contentType } = req.file; // Assuming you are using Multer middleware to handle file uploads
+
+    const newProduct = new Product({
+      title,
+      summary,
+      price,
+      image: {
+        data,
+        contentType,
+        path: req.file.path,
+      },
+    });
+
+    const savedProduct = await newProduct.save();
+
+    res.redirect("/admin/products"); // Redirect to the product list page after successful creation
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create a new product" });
+  }
+};
+
+app.post("/admin/products/new", upload.single("image"), createNewProduct);
+
+
+
+//user view product details
+app.get("/user/products/:id",function(req,res){
+  Product.findById(req.params.id).then(function(product){
+    res.render("user/products/product-details", {product});
+  });
+});
+
+
+
+//user routes
+
+//app.get('/user/products',userGetAllProduct);
+
+//admin routes (protected)
+
+
+app.get("/admin", isAdmin ,function(req,res){
+
+  Product.find().then(function(products){
+    
+    res.render("admin/products/all-products", { products });
+  });  
+})
+
+//admin product  function
+app.get("/admin/products", isAdmin ,function(req,res){
+
+  Product.find().then(function(products){
+    
+    res.render("admin/products/manage-products", { products });
+  });  
+})
+//admin add product
+app.get("/admin/products/new", isAdmin ,function (req, res)  {
+  res.render("admin/products/new-product"); // Render the "add-product.ejs" template
+});
+
+//admin view and edit product details
+app.get("/admin/products/:id",function(req,res){
+  Product.findById(req.params.id).then(function(product){
+    res.render("user/products/product-details", {product});
+  });
+});
+//admin update product
+app.get("/admin/products/:id/update",function(req,res){
+  Product.findById(req.params.id).then(function(product){
+    res.render("admin/products/update-product", {product});
+  });
+});
+
+//delete product
+// DELETE /admin/products/:id
+async function postDeleteProduct(req, res, next) {
+  let product;
+  try {
+    product = await Product.findById(req.params.id);
+    await product.remove();
+  } catch (error) {
+    return next(error);
+  }
+  res.redirect('/admin/products');
+
+}
+
+app.post('/admin/products/:id',postDeleteProduct);
+
+
+//cart routes
+
+app.get ("/cart", function(req, res) {
+  res.render("user/cart/cart");
+})
+
+//order
+async function getOrders(req, res) {
+  try {
+    const orders = await Order.findAllForUser(res.locals.uid);
+    res.render('user/orders/all-orders', {
+      orders: orders,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+app.get('/user/orders', getOrders);
 
 
 // route not found error
