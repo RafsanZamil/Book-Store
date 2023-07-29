@@ -8,9 +8,10 @@
       </ul>
     </div>
     <div class="navbar-middle">
-      <form action="/search" method="GET">
-        <input type="text" name="query" placeholder="Search books">
-        <button type="submit"><i class="fas fa-search"></i></button>
+      <form action="/user" method="GET">
+        <i class="fas fa-search"></i>
+        <input type="text" name="" id="find" placeholder="Search books" onkeyup="search()">
+        
       </form>
     </div>
     <div class="navbar-right">
@@ -53,22 +54,26 @@
 .navbar-middle form {
   display: flex;
   align-items: center;
+  border: 2px solid #605151;
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 5px;
 }
 
 .navbar-middle input[type="text"] {
   padding: 10px;
   border: none;
+  outline:none;
+  box-shadow:none;
   border-radius: 10px;
   width: 300px;
   font-size: 18px;
+  background-color: transparent;
+  color:black;
 }
 
-.navbar-middle button {
-  padding: 10px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
+
+
 
 li {
   display: inline;
@@ -109,7 +114,7 @@ li a:hover {
    <body>
      <h1>Product List</h1>
      <div class="product-container">
-      <% products.forEach((product) => { %>
+      <% products.forEach(product => { %>
         <div class="product">
           <h2><%= product.title %></h2>
           <p><%= product.summary %></p>
@@ -123,7 +128,31 @@ li a:hover {
         </div>
       <% }) %>
     </div>
-   
-     
+    <script type = "text/javascript">
+
+      function search() {
+        let filter = document.getElementById('find').value.toUpperCase();
+
+        let item = document.querySelectorAll('.product');
+
+        let l = document.getElementsByTagName('h2')
+        for(var i =0 ; i<=l.length;i++){
+          let a=item[i].getElementsByTagName('h2')[0];
+          let value=a.innerHTML || a.innerText || a.textContent;
+
+          if (value.toUpperCase().indexOf(filter)> -1){
+            item[i].style.display="";
+          }
+          else{
+            item[i].style.display="none";
+          }
+
+
+        }
+
+      }
+
+    </script>
+ 
    </body>
    </html>
