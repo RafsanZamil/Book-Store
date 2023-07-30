@@ -2,22 +2,26 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Details</title>
-  <link rel="stylesheet" href="/css/style.css"> <!-- Adjust the path to your CSS file -->
-</head>
-<body>
-  <div class="product-details">
-    <h1><%= product.title %></h1>
-    <img src="<%= product.image %>" alt="Product Image">
-    <p>Price: $<%= product.price %></p>
-    <p>Product ID: <%= product._id %></p>
-    <form action="/cart/add" method="POST"> <!-- Assuming you have a route for adding to the cart -->
-      <input type="hidden" name="productId" value="<%= product._id %>"> <!-- Pass the product ID in a hidden field -->
-      <button type="submit">Add to Cart</button>
-    </form>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <!-- Adjust the path to your CSS file -->
+  </head>
+  <body>
+    <div class="product-details">
+      <h1><%= product.title %></h1>
+      <img src="<%= product.image.path %>" alt="Product Image" />
+      <p><%= product.summary %></p>
+      <p>Price: $<%= product.price %></p>
+      <p>Product ID: <%= product._id %></p>
+      <form action="/cart/add/<%= product._id %>" method="POST">
+        <!-- Assuming you have a route for adding to the cart -->
+        <input type="hidden" name="productId" value="<%= product._id %>" />
+        <!-- Pass the product ID in a hidden field -->
+        <button type="submit">Add to Cart</button>
+      </form>
+    </div>
+  </body>
 </html>

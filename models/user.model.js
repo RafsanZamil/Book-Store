@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 
-
 const passportLocalMongoose = require("passport-local-mongoose");
 
-const findOrCreate = require('mongoose-findorcreate');
+const findOrCreate = require("mongoose-findorcreate");
 
 const userSchema = mongoose.Schema({
   id: {
@@ -16,17 +15,14 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    reuired: [true,"please add a password"],
+    reuired: [true, "please add a password"],
     minlength: 6,
-    select:false
+    select: false,
   },
-  googleId:{type:String,
-  } ,
-  secret: {type:String,
-  },
-  isAdmin:{
-    type:Boolean,
-    default:false
+  googleId: { type: String },
+  isAdmin: {
+    type: Boolean,
+    default: false,
   },
   createdOn: {
     type: Date,
@@ -37,4 +33,3 @@ const userSchema = mongoose.Schema({
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 module.exports = mongoose.model("User", userSchema);
-

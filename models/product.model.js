@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const findOrCreate = require('mongoose-findorcreate');
-
+const findOrCreate = require("mongoose-findorcreate");
 
 const productSchema = mongoose.Schema({
   title: {
@@ -24,6 +23,12 @@ const productSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+productSchema.pre("save", function (next) {
+  if (this.image && this.image.path) {
+    this.image.path = this.image.path.replace("public\\", "\\");
+  }
+  next();
 });
 
 module.exports = mongoose.model("Product", productSchema);

@@ -1,143 +1,142 @@
 const express = require("express");
 const cors = require("cors");
-const ejs = require('ejs')
+const ejs = require("ejs");
 const multer = require("multer");
 const path = require("path");
 
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
 const User = require("./models/user.model");
 const Product = require("./models/product.model");
+const Cart = require("./models/cart.model");
 require("./config/db");
-const config =require("./config/config");
-const userSchema= require("./models/user.model")
+const config = require("./config/config");
+const userSchema = require("./models/user.model");
 //const encrypt= require("mongoose-encryption")
-const session = require('express-session');
+const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const findOrCreate = require('mongoose-findorcreate');
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const findOrCreate = require("mongoose-findorcreate");
 //const isAdmin = require("./middlewares/auth");
 //const userRoute = require("./routes/user.route")
 // const secret = config.SECRET.secret;
 
-const bookRouter = require('./routes/books')
-
+const bookRouter = require("./routes/books");
 
 const app = express();
 app.use(express.static("public"));
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, '/public')));
-
-
+app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, "/public")));
 
 //app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/books', bookRouter)
+app.use("/books", bookRouter);
 
-
-app.use(session({
-  secret: "Our little secret.",
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(
+  session({
+    secret: "Our little secret.",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(User.createStrategy());
 
-
-
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user._id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
     done(err, user);
   });
 });
 
-passport.use(new GoogleStrategy({
-  clientID: config.client_id.client_id,
-  clientSecret: config.client_secret.client_secret,
-  callbackURL: "http://localhost:3000/auth/google/secrets",
-  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-},
-function(accessToken, refreshToken, profile, cb) {
-  console.log(profile);
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: config.client_id.client_id,
+      clientSecret: config.client_secret.client_secret,
+      callbackURL: "http://localhost:3000/auth/google/secrets",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      console.log(profile);
 
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return cb(err, user);
-  });
-}
-));
-
-
-
-
-
-app.get("/", function(req, res) {
- res.render("home");
-});
-app.get("/auth/google",
-  passport.authenticate('google', { scope: ["profile"] })
+      User.findOrCreate(
+        { googleId: profile.id },
+        { email: profile.displayName },
+        function (err, user) {
+          return cb(err, user);
+        }
+      );
+    }
+  )
 );
 
-app.get("/auth/google/secrets",
-  passport.authenticate('google', { failureRedirect: "/login" }),
-  function(req, res) {
+app.get("/", function (req, res) {
+  res.render("home");
+});
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+
+app.get(
+  "/auth/google/secrets",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
     // Successful authentication, redirect to secrets.
-    res.redirect("/secrets");
-  });
-
-
-
-
-
-
+    res.redirect("/user");
+  }
+);
 
 //user Routes
-app.get("/login",function(req,res){
+app.get("/login", function (req, res) {
   res.render("login");
-})
-app.get("/register",function(req,res){
+});
+app.get("/register", function (req, res) {
   res.render("register");
-})
-app.get("/user",function(req,res){
-  Product.find().then(function(products){
+});
+app.get("/user", function (req, res) {
+  Product.find().then(function (products) {
     res.render("user/products/all-products", { products });
-  });  
-})
-app.post("/register", function(req, res){
-
-  User.register({username: req.body.username}, req.body.password, function(err, user){
-    if (err) {
-      console.log(err);
-      res.redirect("/register");
-    } else {
-      passport.authenticate("local")(req, res, function(){
-        res.redirect("/");
-      });
-    }
   });
-
+});
+app.post("/register", function (req, res) {
+  User.register(
+    { username: req.body.username },
+    req.body.password,
+    function (err, user) {
+      if (err) {
+        console.log(err);
+        res.redirect("/register");
+      } else {
+        passport.authenticate("local")(req, res, function () {
+          res.redirect("/");
+        });
+      }
+    }
+  );
 });
 
-app.post("/login", function(req, res) {
+app.post("/login", function (req, res) {
   const user = new User({
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
   });
 
-  req.login(user, function(err) {
+  req.login(user, function (err) {
     if (err) {
       console.log(err);
     } else {
-      passport.authenticate("local")(req, res, function() {
+      passport.authenticate("local")(req, res, function () {
         if (req.user.isAdmin) {
           res.redirect("/admin");
         } else {
@@ -159,7 +158,6 @@ function isLoggedIn(req, res, next) {
   }
   next();
 }
-
 
 //midlewares
 
@@ -186,7 +184,6 @@ const storage = multer.diskStorage({
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const extension = file.originalname.split(".").pop();
     cb(null, file.fieldname + "-" + uniqueSuffix + "." + extension);
- 
   },
 });
 
@@ -199,47 +196,34 @@ app.post("/upload", upload.single("image"), (req, res) => {
   res.send("Image uploaded successfully!");
 });
 
-
-
-
 //protected routes
 // app.get("/admin", isAdmin, function(req, res) {
 //   // Render admin panel view
 //   res.render("partials/admin-navbar");
 // });
 
-
-app.get("/secrets", function(req, res){
-  User.find({"secret": {$ne: null}}, function(err, foundUsers){
-    if (err){
+app.get("/secrets", function (req, res) {
+  User.find({ secret: { $ne: null } }, function (err, foundUsers) {
+    if (err) {
       console.log(err);
     } else {
       if (foundUsers) {
-        res.render("secret", {usersWithSecrets: foundUsers});
+        res.render("secret", { usersWithSecrets: foundUsers });
       }
     }
   });
 });
 
-
-
-app.get('/logout', function(req, res, next) {
-  req.logout(function(err) {
-    if (err) { return next(err); }
-    res.redirect('/');
+app.get("/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
   });
 });
 
-
 //product routes
-
-
-
-
- 
-
-
-
 
 const createNewProduct = async (req, res) => {
   try {
@@ -267,16 +251,12 @@ const createNewProduct = async (req, res) => {
 
 app.post("/admin/products/new", upload.single("image"), createNewProduct);
 
-
-
 //user view product details
-app.get("/user/products/:id",function(req,res){
-  Product.findById(req.params.id).then(function(product){
-    res.render("user/products/product-details", {product});
+app.get("/user/products/:id", function (req, res) {
+  Product.findById(req.params.id).then(function (product) {
+    res.render("user/products/product-details", { product });
   });
 });
-
-
 
 //user routes
 
@@ -284,38 +264,33 @@ app.get("/user/products/:id",function(req,res){
 
 //admin routes (protected)
 
-
-app.get("/admin", isAdmin ,function(req,res){
-
-  Product.find().then(function(products){
-    
+app.get("/admin", isAdmin, function (req, res) {
+  Product.find().then(function (products) {
     res.render("admin/products/all-products", { products });
-  });  
-})
+  });
+});
 
 //admin product  function
-app.get("/admin/products", isAdmin ,function(req,res){
-
-  Product.find().then(function(products){
-    
+app.get("/admin/products", isAdmin, function (req, res) {
+  Product.find().then(function (products) {
     res.render("admin/products/manage-products", { products });
-  });  
-})
+  });
+});
 //admin add product
-app.get("/admin/products/new", isAdmin ,function (req, res)  {
+app.get("/admin/products/new", isAdmin, function (req, res) {
   res.render("admin/products/new-product"); // Render the "add-product.ejs" template
 });
 
 //admin view and edit product details
-app.get("/admin/products/:id",function(req,res){
-  Product.findById(req.params.id).then(function(product){
-    res.render("user/products/product-details", {product});
+app.get("/admin/products/:id", function (req, res) {
+  Product.findById(req.params.id).then(function (product) {
+    res.render("user/products/product-details", { product });
   });
 });
 //admin update product
-app.get("/admin/products/:id/update",function(req,res){
-  Product.findById(req.params.id).then(function(product){
-    res.render("admin/products/update-product", {product});
+app.get("/admin/products/:id/update", function (req, res) {
+  Product.findById(req.params.id).then(function (product) {
+    res.render("admin/products/update-product", { product });
   });
 });
 
@@ -329,32 +304,42 @@ async function postDeleteProduct(req, res, next) {
   } catch (error) {
     return next(error);
   }
-  res.redirect('/admin/products');
-
+  res.redirect("/admin/products");
 }
 
-app.post('/admin/products/:id',postDeleteProduct);
-
+app.post("/admin/products/:id", postDeleteProduct);
 
 //cart routes
-
-app.get ("/cart", function(req, res) {
+app.get("/cart", function (req, res) {
   res.render("user/cart/cart");
-})
+});
+//Cart Routes.
+app.post("/cart/add/:id", function (req, res) {
+  Product.findById(req.params.id).then(function (product) {
+    const cart = new Cart({
+      userEmail: req.user._id,
+      item: product.title,
+      totalPrice: product.price,
+    });
+    cart.save().then(function () {
+      res.redirect("/user");
+      console.log("added");
+    });
+  });
+});
 
 //order
 async function getOrders(req, res) {
   try {
     const orders = await Order.findAllForUser(res.locals.uid);
-    res.render('user/orders/all-orders', {
+    res.render("user/orders/all-orders", {
       orders: orders,
     });
   } catch (error) {
     next(error);
   }
 }
-app.get('/user/orders', getOrders);
-
+app.get("/user/orders", getOrders);
 
 // route not found error
 app.use((req, res, next) => {

@@ -1,18 +1,14 @@
-
- 
-
 <nav>
   <div class="navbar-container">
     <div class="navbar-left">
-     
       <ul>
-        <li><a href="/admin">Book Store</a></li> 
+        <li><a href="/admin">Book Store</a></li>
         <li><a href="/category">Category</a></li>
       </ul>
     </div>
     <div class="navbar-middle">
       <form action="/search" method="GET">
-        <input type="text" name="query" placeholder="Search books">
+        <input type="text" name="query" placeholder="Search books" />
         <button type="submit"><i class="fas fa-search"></i></button>
       </form>
     </div>
@@ -26,109 +22,167 @@
   </div>
 </nav>
 
+<style>
+  nav {
+    background-color: #605151;
+    padding: 25px;
+    text-align: center;
+  }
 
-  
-  <style>
-    nav {
-  background-color: #605151;
-  padding: 25px;
-  text-align: center;
-}
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+  .navbar-left ul,
+  .navbar-right ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 
-.navbar-left ul,
-.navbar-right ul {
-  display: flex;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
+  .navbar-middle form {
+    display: flex;
+    align-items: center;
+  }
 
-.navbar-middle form {
-  display: flex;
-  align-items: center;
-}
+  .navbar-middle input[type="text"] {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 300px;
+    font-size: 18px;
+  }
 
-.navbar-middle input[type="text"] {
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  width: 300px;
-  font-size: 18px;
-}
+  .navbar-middle button {
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
 
-.navbar-middle button {
-  padding: 10px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
+  li {
+    display: inline;
+    margin-right: 10px;
+  }
 
-li {
-  display: inline;
-  margin-right: 10px;
-}
+  li a {
+    text-decoration: none;
+    color: #fff0f0;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
 
-li a {
-  text-decoration: none;
-  color: #fff0f0;
-  font-size: 18px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  transition: background-color 0.3s ease;
-}
+  li a:hover {
+    background-color: #888888;
+    color: #ffffff;
+  }
 
-li a:hover {
-  background-color: #888888;
-  color: #ffffff;
-}
+  .fa-shopping-cart {
+    margin-right: 13px;
+  }
+</style>
 
-.fa-shopping-cart {
-  margin-right: 13px;
-}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
 
-
-
-  </style>
- 
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-  
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
- <!DOCTYPE html>
- <html lang="en">
- <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Product List</title>
-   <link rel="stylesheet" href="/css/style.css"> <!-- Adjust the path to your CSS file -->
- </head>
- <body>
-   <h1>Product List</h1>
-   <div class="product-container">
-    <% products.forEach((product) => { %>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product List</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <!-- Adjust the path to your CSS file -->
+  </head>
+  <body>
+    <h1>Product List</h1>
+    <div class="product-container">
+      <% products.forEach((product) => { %>
       <div class="product">
         <h2><%= product.title %></h2>
-        <p><%= product.summary %></p>
-        <p>Price: $<%= product.price %></p>
-        <img src="<%= product.image.path %>" alt="Product Image">
 
-        
-           
-          <a href="/user/products/<%= product._id %>">View Details</a>
-        
+        <p>Price: $<%= product.price %></p>
+        <img src="<%= product.image.path %>" alt="Product Image" />
+
+        <a href="/user/products/<%= product._id %>">View Details</a>
       </div>
-    <% }) %>
-  </div>
- 
-   
- </body>
- </html>
+      <% }) %>
+    </div>
+  </body>
+</html>
+
+<style>
+  /* CSS for the product container */
+  .product {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    text-align: center;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* CSS for the product title */
+  .product h2 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  /* CSS for the product price */
+  .product p {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  /* CSS for the product image */
+  .product img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  /* CSS for the product summary */
+  .product p.summary {
+    font-size: 1em;
+    color: #777;
+    margin-bottom: 15px;
+  }
+
+  .product a {
+    display: inline-block;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  /* Change link color on hover */
+  .product a:hover {
+    background-color: #45a049;
+  }
+</style>
