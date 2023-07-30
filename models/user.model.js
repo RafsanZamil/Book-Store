@@ -20,6 +20,7 @@ const userSchema = mongoose.Schema({
     select: false,
   },
   googleId: { type: String },
+  email: { type: String, reuire: true },
   isAdmin: {
     type: Boolean,
     default: false,

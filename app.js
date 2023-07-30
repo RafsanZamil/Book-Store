@@ -11,15 +11,12 @@ const Cart = require("./models/cart.model");
 require("./config/db");
 const config = require("./config/config");
 const userSchema = require("./models/user.model");
-//const encrypt= require("mongoose-encryption")
+
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
-//const isAdmin = require("./middlewares/auth");
-//const userRoute = require("./routes/user.route")
-// const secret = config.SECRET.secret;
 
 const bookRouter = require("./routes/books");
 
@@ -27,8 +24,6 @@ const app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "/public")));
-
-//app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -227,13 +222,15 @@ app.get("/logout", function (req, res, next) {
 
 const createNewProduct = async (req, res) => {
   try {
-    const { title, summary, price } = req.body;
+    const { title, summary, price, genre } = req.body;
     const { data, contentType } = req.file; // Assuming you are using Multer middleware to handle file uploads
 
     const newProduct = new Product({
       title,
       summary,
       price,
+      genre,
+
       image: {
         data,
         contentType,
@@ -310,10 +307,23 @@ async function postDeleteProduct(req, res, next) {
 app.post("/admin/products/:id", postDeleteProduct);
 
 //cart routes
+
 app.get("/cart", function (req, res) {
-  res.render("user/cart/cart");
+  // Assuming you have a Cart model defined somewhere to interact with the cart data.
+  Cart.find({ userEmail: req.user._id }).then(function (cartItems) {
+    // Calculate the total price of all items in the cart.
+    let totalPrice = 0;
+    for (const cartItem of cartItems) {
+      totalPrice += cartItem.totalPrice;
+    }
+
+    res.render("user/cart/cart", {
+      cartItems: cartItems,
+      totalPrice: totalPrice,
+    });
+  });
 });
-//Cart Routes.
+
 app.post("/cart/add/:id", function (req, res) {
   Product.findById(req.params.id).then(function (product) {
     const cart = new Cart({
@@ -322,12 +332,32 @@ app.post("/cart/add/:id", function (req, res) {
       totalPrice: product.price,
     });
     cart.save().then(function () {
-      res.redirect("/user");
+      res.redirect("/cart");
       console.log("added");
     });
   });
 });
 
+app.delete("/cart/:productId", (req, res) => {
+  const productId = req.params.productId;
+  cartItems = cartItems.filter((item) => item.productId !== productId);
+  // You can optionally update the cart in a database or a session on the server here
+  // Redirect the user back to the cart page after successful removal
+  res.redirect("/cart");
+});
+//category routes
+
+app.get("/category/:genre", async (req, res) => {
+  const genre = req.params.genre;
+  try {
+    // Assuming you have a method to fetch products by genre in your model
+    const products = await Product.find({ genre });
+    res.render("category", { genre, products });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 //order
 async function getOrders(req, res) {
   try {

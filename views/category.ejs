@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Products by Genre</title>
+    <!-- Add your CSS and any other required libraries here -->
+  </head>
+  <body>
+    <h1>Products by Genre: <%= genre %></h1>
+    <ul>
+      <% products.forEach((product) => { %>
+      <div class="product">
+        <h2><%= product.title %></h2>
+
+        <p>Price: $<%= product.price %></p>
+        <img src="<%= product.image.path %>" alt="Product Image" />
+
+        <a href="/user/products/<%= product._id %>">View Details</a>
+      </div>
+      <% }) %>
+    </ul>
+  </body>
+</html>
+<style>
+  /* styles.css */
+  /* Styles for the products page */
+
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f2f2f2;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .product {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    margin: 0;
+    color: #007bff;
+  }
+
+  p {
+    margin: 5px 0;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  a {
+    display: block;
+    text-align: center;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  a:hover {
+    background-color: #0056b3;
+  }
+
+  /* Add more styles as needed */
+</style>

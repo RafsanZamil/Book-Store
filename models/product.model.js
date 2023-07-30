@@ -14,6 +14,11 @@ const productSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  genre: {
+    type: String,
+    reiquired: true,
+  },
+
   image: {
     data: Buffer, // Store image data as a buffer
     contentType: String, // Store the content type of the image
