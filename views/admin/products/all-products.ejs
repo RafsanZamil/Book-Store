@@ -7,9 +7,15 @@
       </ul>
     </div>
     <div class="navbar-middle">
-      <form action="/search" method="GET">
-        <input type="text" name="query" placeholder="Search books" />
-        <button type="submit"><i class="fas fa-search"></i></button>
+      <form action="/admin" method="GET">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          name=""
+          id="find"
+          placeholder="Search books"
+          onkeyup="search()"
+        />
       </form>
     </div>
     <div class="navbar-right">
@@ -48,6 +54,10 @@
   .navbar-middle form {
     display: flex;
     align-items: center;
+    border: 2px solid #605151;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 5px;
   }
 
   .navbar-middle input[type="text"] {
@@ -56,13 +66,16 @@
     border-radius: 10px;
     width: 300px;
     font-size: 18px;
+    outline: none;
+    box-shadow: none;
   }
 
   .navbar-middle button {
     padding: 10px;
     border: none;
     background-color: transparent;
-    cursor: pointer;
+
+    color: black;
   }
 
   li {
@@ -112,9 +125,9 @@
     <!-- Adjust the path to your CSS file -->
   </head>
   <body>
-    <h1>Product List</h1>
+    <h1>All Products</h1>
     <div class="product-container">
-      <% products.forEach((product) => { %>
+      <% products.forEach(product => { %>
       <div class="product">
         <h2><%= product.title %></h2>
 
@@ -125,10 +138,30 @@
       </div>
       <% }) %>
     </div>
+
+    <script type="text/javascript">
+      function search() {
+        let filter = document.getElementById("find").value.toUpperCase();
+        let item = document.querySelectorAll(".product");
+        let l = document.getElementsByTagName("h2");
+        for (var i = 0; i <= l.length; i++) {
+          let a = item[i].getElementsByTagName("h2")[0];
+          let value = a.innerHTML || a.innerText || a.textContent;
+          if (value.toUpperCase().indexOf(filter) > -1) {
+            item[i].style.display = "";
+          } else {
+            item[i].style.display = "none";
+          }
+        }
+      }
+    </script>
   </body>
 </html>
 
 <style>
+  body {
+    background-color: #f4e5d0;
+  }
   /* CSS for the product container */
   .product {
     border: 1px solid #ccc;
@@ -137,7 +170,7 @@
     margin: 10px;
     width: 300px;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #f8f2ec;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 

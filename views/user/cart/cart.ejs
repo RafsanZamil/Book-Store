@@ -8,22 +8,23 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="cart-container">
+      <h1>Shopping Cart</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Item: $<%= item %></th>
+            <th>Price: <%= price%></th>
 
-
-    
-    <div class="Cart-container">
-      <% cart.forEach((cart) => { %>
-      <div class="product">
-        <h2><%= cart.item %></h2>
-
-        <p>Price: $<%= cart.price %></p>
-        <button id="checkout-btn">Checkout</button>
-   
-
-       
-      </div>
-      <% }) %>
-    
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items">
+          <!-- Cart items will be dynamically added here using JavaScript -->
+        </tbody>
+      </table>
+      <button id="checkout-btn">Checkout</button>
+    </div>
 
     <script src="app.js"></script>
   </body>

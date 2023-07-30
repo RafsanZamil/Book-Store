@@ -1,5 +1,5 @@
 body {
-  background-color: #e8ecef;
+  background-color: #303138;
 }
 
 .centered {
@@ -98,6 +98,7 @@ h1 {
   margin: 0 auto;
   padding: 20px;
   text-align: center;
+  background-color: #bc8f8f;
 }
 
 .product-details h1 {
@@ -113,6 +114,8 @@ h1 {
 
 .product-details p {
   margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold; /* Make the text bold */
 }
 
 .product-details form {
@@ -171,7 +174,7 @@ body {
 h1 {
   text-align: center;
   padding: 20px 0;
-  background-color: #007bff;
+  background-color: #888888;
   color: #fff;
   margin-bottom: 30px;
 }
