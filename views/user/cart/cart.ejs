@@ -1,109 +1,89 @@
-<!-- ... (previous HTML code) ... -->
-<table>
-  <tr>
-    <th>Item</th>
-    <th>Total Price</th>
-    <th>Action</th> <!-- New column for the Remove button -->
-  </tr>
-  <% cartItems.forEach(function (cartItem) { %>
-  <tr>
-    <td><%= cartItem.item %></td>
-    <td><%= cartItem.totalPrice %></td>
-    <td>
-      <button class="remove-button" data-productid="<%= cartItem.productId %>">Remove</button>
-    </td>
-  </tr>
-  <% }); %>
-</table>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cart</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
 
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
 
-    <p class="total-price">Total Price: <%= totalPrice %></p>
-    <!-- Checkout Button -->
-    <div class="checkout-button">
-      <a href="/checkout" class="checkout-link">Proceed to Checkout</a>
-    </div>
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background-color: #ffffff;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    span {
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: #ff0000;
+      color: #ffffff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    p {
+      text-align: center;
+    }
+
+    .cart-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .empty-cart {
+      text-align: center;
+      color: #999999;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="cart-container">
+    <h1>Your Cart</h1>
+    <% if (cartItems.length > 0) { %>
+      <ul>
+        <% for (const cartItem of cartItems) { %>
+          <li>
+            <span><%= cartItem.item %></span> - <span>$<%= cartItem.totalPrice %></span>
+            <form action="/cart/remove/<%= cartItem._id %>" method="post">
+              <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
+          </li>
+        <% } %>
+      </ul>
+      <p>Total Price: $<%= totalPrice %></p>
+      <a href="/checkout" class="btn btn-primary">Proceed to Checkout</a> <!-- Added "Proceed to Checkout" button -->
+    <% } else { %>
+      <p class="empty-cart">Your cart is empty.</p>
+    <% } %>
   </div>
+
+  <!-- Add Bootstrap JS and jQuery scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-<script>
-  // JavaScript code to handle the Remove button click event
-  const removeButtons = document.querySelectorAll('.remove-button');
-
-  removeButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const productId = this.dataset.productid;
-      removeProduct(productId);
-    });
-  });
-
-  function removeProduct(productId) {
-    fetch(`/cart/${productId}`, {
-      method: 'DELETE',
-    })
-    .then(response => {
-      if (response.ok) {
-        // Redirect the user to the cart page after successful removal
-        window.location.href = '/cart';
-      } else {
-        throw new Error('Failed to remove product from cart.');
-      }
-    })
-    .catch(error => {
-      console.error('Error removing product from cart:', error);
-      // Optionally display an error message to the user
-    });
-  }
-</script>
-
-
-<style>
-
-  /* cart.css */
-  /* cart.css */
-  .card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 20px;
-    max-width: 400px;
-    background-color: #fff;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-
-  table,
-  th,
-  td {
-    border: 1px solid #ccc;
-    padding: 8px;
-  }
-
-  th {
-    background-color: #f2f2f2;
-  }
-
-  .total-price {
-    margin-top: 20px;
-    font-weight: bold;
-  }
-
-  .checkout-button {
-    text-align: center;
-    margin-top: 20px;
-  }
-
-  .checkout-link {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-  }
-
-  /* Add more styles as needed */
-</style>
+</html>
