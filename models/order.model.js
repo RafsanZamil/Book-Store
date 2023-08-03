@@ -19,18 +19,13 @@ const orderSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
-    get: function() {
+    get: function () {
       return this.getDateFormatted();
     },
   },
-  orderId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
 });
 
-orderSchema.methods.getDateFormatted = function() {
+orderSchema.methods.getDateFormatted = function () {
   const options = {
     year: "numeric",
     month: "2-digit",

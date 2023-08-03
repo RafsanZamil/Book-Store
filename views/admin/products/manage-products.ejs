@@ -7,15 +7,15 @@
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         />
-
-        <li class="category-dropdown">
-          <a href="/category">Category</a>
-          <ul class="subcategories">
+        <li class="has-dropdown">
+          <a href="/category">Categories</a>
+          <ul class="dropdown-menu">
             <li><a href="/category/Fiction">Fiction</a></li>
             <li><a href="/category/Novel">Novel</a></li>
             <li><a href="/category/Scientific">Scientific</a></li>
             <li><a href="/category/Mystery">Mystery</a></li>
             <li><a href="/category/History">History</a></li>
+            <li><a href="/category/Uncategorized">Uncategorized</a></li>
           </ul>
         </li>
       </ul>
@@ -42,49 +42,7 @@
   </div>
 </nav>
 
-<script>
-  // JavaScript to show/hide the subcategories dropdown on hover
-  const categoryDropdown = document.querySelector(".category-dropdown");
-  const subcategories = document.querySelector(".subcategories");
-
-  categoryDropdown.addEventListener("mouseenter", () => {
-    subcategories.style.display = "block";
-  });
-
-  categoryDropdown.addEventListener("mouseleave", () => {
-    subcategories.style.display = "none";
-  });
-</script>
-
 <style>
-  .subcategories {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-  }
-
-  .category-dropdown:hover .subcategories {
-    display: block;
-  }
-
-  .subcategories li {
-    list-style: none;
-  }
-
-  .subcategories li a {
-    display: block;
-    padding: 5px;
-    color: #333;
-    text-decoration: none;
-  }
-
-  .subcategories li a:hover {
-    background-color: blue;
-  }
-
   nav {
     background-color: #605151;
     padding: 25px;
@@ -99,7 +57,42 @@
     margin: 0 auto;
   }
 
-  .navbar-left ul,
+  /* ... (existing styles) ... */
+
+  .navbar-left ul li {
+    position: relative;
+  }
+
+  .has-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #555;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+  }
+
+  .has-dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu li {
+    padding: 10px;
+  }
+
+  .dropdown-menu li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-menu li a:hover {
+    background-color: #777;
+  }
+
   .navbar-right ul {
     display: flex;
     list-style-type: none;
@@ -175,9 +168,30 @@
   </head>
   <body>
     <h1>All Books</h1>
-    <div class="action-container">
-      <a href="/admin/products/new" class="add-product">Add Product</a>
+    <!-- ... (existing code) ... -->
+
+    <div class="action-containers">
+      <form action="" method="POST" id="deleteForm" class="form-group">
+        <label for="genreToDelete">Select Genre to Delete:</label>
+        <select id="genreToDelete" name="genreToDelete" required>
+          <option value="">Select a Genre</option>
+          <option value="Fiction">Fiction</option>
+          <option value="Novel">Novel</option>
+          <option value="Scientific">Scientific</option>
+          <option value="History">History</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Uncategorized">Uncategorized</option>
+        </select>
+        <button type="button" onclick="deleteBooksByGenre()">
+          Delete Genre Books
+        </button>
+      </form>
+      <button class="add-product" onclick="redirectToNewProduct()">
+        Add Product
+      </button>
     </div>
+
+    <!-- ... (existing code) ... -->
 
     <div class="product-container">
       <% products.forEach((product) => { %>
@@ -217,12 +231,123 @@
     </script>
   </body>
 </html>
+<script>
+  async function deleteBooksByGenre() {
+    const genreToDelete = document.getElementById("genreToDelete").value;
 
+    if (!genreToDelete) {
+      alert("Please select a genre to delete.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `/admin/category/delete/${encodeURIComponent(genreToDelete)}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message); // Show success message (e.g., 'All Fiction books deleted successfully.')
+        // Optionally, you can reload the page or update the UI to reflect the changes.
+      } else {
+        const errorData = await response.json();
+        alert("deleted genre books: " + errorData.error);
+      }
+    } catch (error) {
+      alert("An error occurred: " + error.message);
+    }
+  }
+</script>
+
+<script>
+  function redirectToNewProduct() {
+    // Redirect to the "/admin/products/new" page to add a new product.
+    window.location.href = "/admin/products/new";
+  }
+</script>
 <style>
   body {
     background-color: #f4e5d0;
   }
   /* CSS for the product container */
+  /* ... (existing styles) ... */
+
+  .action-containers {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-right: 100px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+    color: #333;
+  }
+
+  .form-group select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 200px;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  .form-group select:hover {
+    border-color: #555;
+  }
+
+  .form-group select:focus {
+    outline: none;
+    box-shadow: 0 0 5px #999;
+  }
+
+  .form-group button {
+    padding: 8px 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .form-group button:hover {
+    background-color: #45a049;
+  }
+
+  .add-product {
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    margin-right: 600px;
+  }
+
+  .add-product:hover {
+    background-color: #45a049;
+  }
+
+  /* ... (existing styles) ... */
+
+  /* ... (existing styles) ... */
+
   .product {
     border: 1px solid #ccc;
     border-radius: 5px;

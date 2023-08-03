@@ -1,4 +1,8 @@
 <style>
+  /* ... (existing styles) ... */
+  body {
+    background-color: #f4e5d0;
+  }
   h2 {
     font-size: 24px;
     color: #333;
@@ -38,7 +42,6 @@
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #f5f5f5;
   }
 
   .book-name {
@@ -54,9 +57,34 @@
 
   /* Additional styles for book reviews background */
   .book-review-bg {
-    background-color: #fafafa;
+    background-color: #f0f0f0; /* Light gray background */
     border-radius: 8px;
     padding: 10px;
+  }
+
+  /* Updated styles for book reviews */
+  .book {
+    width: 300px; /* Set the width of the book review container */
+    float: left; /* Float the book review boxes to the left */
+    margin-right: 20px; /* Add some space between the book review boxes */
+  }
+
+  .add-review-button {
+    display: block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #28a745; /* Green color, you can change it as needed */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+  }
+
+  .add-review-button:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: translateY(-5px);
   }
 </style>
 
@@ -64,21 +92,32 @@
 <form action="/books" method="GET">
   <div>
     <label>Book Name</label>
-    <input type="text" name="title" value="<%= searchOptions.title %>">
+    <input type="text" name="title" value="<%= searchOptions.title %>" />
   </div>
-  
+
   <button type="submit">Search</button>
 </form>
 
+<button class="add-review-button" onclick="redirectToNewReview()">
+  Add Review
+</button>
+
 <div>
   <% books.forEach(book => { %>
-    <div class="book">
-      <div class="book-review-bg"> <!-- Added background for book review -->
-        <p class="book-name">Book Name: <%= book.title %></p>
-        <p class="book-review">Review: <%= book.description %></p>
-      </div>
+  <div class="book">
+    <div class="book-review-bg">
+      <p class="book-name">Book Name: <%= book.title %></p>
+      <p class="book-review">Review: <%= book.description %></p>
     </div>
+  </div>
   <% }) %>
 </div>
 
+<!-- Add Review button -->
 
+<script>
+  function redirectToNewReview() {
+    // Redirect to the "/books/new" page to add a new review.
+    window.location.href = "/books/new";
+  }
+</script>

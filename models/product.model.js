@@ -31,7 +31,7 @@ const productSchema = mongoose.Schema({
 });
 productSchema.pre("save", function (next) {
   if (this.image && this.image.path) {
-    this.image.path = this.image.path.replace("public\\", "\\");
+    this.image.path = this.image.path.replace("public", "");
   }
   next();
 });

@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const User = require("./models/user.model");
 const Product = require("./models/product.model");
 const Cart = require("./models/cart.model");
+const Order = require("./models/order.model");
 require("./config/db");
 const config = require("./config/config");
 const userSchema = require("./models/user.model");
@@ -306,6 +307,61 @@ async function postDeleteProduct(req, res, next) {
 
 app.post("/admin/products/:id", postDeleteProduct);
 
+//delete product by genre
+
+
+app.delete('/admin/category/delete/:genre', async (req, res) => {
+  try {
+    const genreToDelete = req.params.genre;
+
+    // Find all products with the specified genre
+    const productsToUpdate = await Product.find({ genre: genreToDelete });
+
+    if (productsToUpdate.length === 0) {
+      return res.status(404).json({ message: 'No products found for the specified genre.' });
+    }
+
+    // Update the genre of the found products to "Uncategorized"
+    await Product.updateMany({ genre: genreToDelete }, { genre: 'Uncategorized' });
+
+    // Now delete the genre
+    await genre.deleteOne({ name: genreToDelete });
+
+    res.json({ message: `Genre "${genreToDelete}" has been deleted, and its products have been moved to "Uncategorized".` });
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred while deleting the genre.' });
+  }
+});
+// app.delete('/admin/category/delete/:genre', async (req, res) => {
+//   try {
+//     const genreToDelete = req.params.genre;
+
+//     // Find all products with the specified genre
+//     const productsToUpdate = await Product.find({ genre: genreToDelete });
+
+//     if (productsToUpdate.length === 0) {
+//       return res.status(404).json({ message: 'No products found for the specified genre.' });
+//     }
+
+//     // Update the genre of the found products to "Uncategorized"
+//     await Product.updateMany({ genre: genreToDelete }, { genre: 'Uncategorized' });
+
+//     // Now delete the genre
+//     await Genre.deleteOne({ name: genreToDelete });
+
+//     res.json({ message: `Genre "${genreToDelete}" has been deleted, and its products have been moved to "Uncategorized".` });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Failed to delete genre books.', error: error.message });
+//   }
+// });
+
+
+
+
+
+
+
 //cart routes
 
 app.get("/cart", function (req, res) {
@@ -338,14 +394,14 @@ app.post("/cart/add/:id", function (req, res) {
   });
 });
 
-app.delete("/cart/:productId", (req, res) => {
-  const productId = req.params.productId;
-  cartItems = cartItems.filter((item) => item.productId !== productId);
-  // You can optionally update the cart in a database or a session on the server here
-  // Redirect the user back to the cart page after successful removal
-  res.redirect("/cart");
+app.get("/checkout", async (req, res) => {
+  res.render("checkout");
 });
 //category routes
+
+app.get("/category", async (req, res) => {
+  res.redirect("/user");
+});
 
 app.get("/category/:genre", async (req, res) => {
   const genre = req.params.genre;
@@ -359,17 +415,23 @@ app.get("/category/:genre", async (req, res) => {
   }
 });
 //order
-async function getOrders(req, res) {
-  try {
-    const orders = await Order.findAllForUser(res.locals.uid);
-    res.render("user/orders/all-orders", {
-      orders: orders,
+
+// Route to save orders by user ID
+
+// Route to handle the order placement after checkout
+app.post("/add/orders/:id", function (req, res) {
+  Cart.findById(req.params._id).then(function (cart) {
+    const order = new Order({
+      user: req.user._id,
+      status: "Pending",
+      cart: req.cart._id,
     });
-  } catch (error) {
-    next(error);
-  }
-}
-app.get("/user/orders", getOrders);
+    cart.save().then(function () {
+      res.redirect("/user");
+      console.log("added");
+    });
+  });
+});
 
 // route not found error
 app.use((req, res, next) => {
