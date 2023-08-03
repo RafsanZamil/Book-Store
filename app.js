@@ -394,6 +394,27 @@ app.post("/cart/add/:id", function (req, res) {
   });
 });
 
+// Add the route for removing items from the cart
+app.post("/cart/remove/:id", function (req, res) {
+  // Find the cart item with the given ID and the user's email.
+  Cart.findOneAndRemove({ _id: req.params.id, userEmail: req.user._id })
+    .then(function (removedCartItem) {
+      if (!removedCartItem) {
+        // If the cart item is not found, return an error or handle the situation accordingly.
+        return res.status(404).json({ error: "Cart item not found" });
+      }
+
+      // Redirect back to the cart page after successful removal.
+      res.redirect("/cart");
+      console.log("removed");
+    })
+    .catch(function (err) {
+      // Handle any potential errors during the removal process.
+      console.error("Error removing cart item:", err);
+      res.status(500).json({ error: "Internal server error" });
+    });
+});
+
 app.get("/checkout", async (req, res) => {
   res.render("checkout");
 });
