@@ -1,17 +1,92 @@
- <%- include('partials/navbar') %>
+<nav>
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <ul>
+        <li><a href="/">Book Store</a></li>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        />
+      </ul>
+    </div>
 
+    <div class="navbar-right">
+      <ul>
+        <li>
+          <a href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a>
+        </li>
 
-<!-- <div class="jumbotron centered">
-  <div class="container">
-    <i class="fas fa-key fa-6x"></i>
-    <h1 class="display-3">Secrets</h1>
-    <p class="lead">Don't keep your secrets, share them anonymously!</p>
-    <hr>
-    <a class="btn btn-light btn-lg" href="/register" role="button">Register</a>
-    <a class="btn btn-dark btn-lg" href="/login" role="button">Login</a>
+        <li><a href="/books">Reviews</a></li>
 
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Sign Up</a></li>
+      </ul>
+    </div>
   </div>
-</div> -->
+</nav>
 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Shop</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- Assuming you have a CSS file named "styles.css" in the public directory -->
+  </head>
 
-<%- include('partials/footer') %> 
+  <style>
+    /* Style for the subcategories dropdown */
+
+    nav {
+      background-color: #605151;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ... (existing styles) ... */
+
+    .navbar-left ul li {
+      position: relative;
+    }
+
+    .navbar-right ul {
+      display: flex;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline;
+      margin-right: 10px;
+    }
+
+    li a {
+      text-decoration: none;
+      color: #fff0f0;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    li a:hover {
+      background-color: #888888;
+      color: #ffffff;
+    }
+
+    .fa-shopping-cart {
+      margin-right: 13px;
+    }
+  </style>
+  <%- include('partials/footer') %>
+</html>

@@ -18,12 +18,21 @@ const productSchema = mongoose.Schema({
     type: String,
     reiquired: true,
   },
+  featured: {
+    type: Boolean,
+    default: false,
+  },
+  topSelling: {
+    type: Boolean,
+    default: false,
+  },
 
   image: {
     data: Buffer, // Store image data as a buffer
     contentType: String, // Store the content type of the image
     path: String, // Store the path to the image
   },
+
   createdOn: {
     type: Date,
     default: Date.now,

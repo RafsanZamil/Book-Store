@@ -1,159 +1,4 @@
-<nav>
-  <div class="navbar-container">
-    <div class="navbar-left">
-      <ul>
-        <li><a href="/user">Book Store</a></li>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        />
-
-        <li class="has-dropdown">
-          <a href="/category">Categories</a>
-          <ul class="dropdown-menu">
-            <li><a href="/category/Fiction">Fiction</a></li>
-            <li><a href="/category/Novel">Novel</a></li>
-            <li><a href="/category/Scientific">Scientific</a></li>
-            <li><a href="/category/Mystery">Mystery</a></li>
-            <li><a href="/category/History">History</a></li>
-            <li><a href="/category/Uncategorized">Uncategorized</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="navbar-middle">
-      <form action="/user" method="GET">
-        <i class="fas fa-search"></i>
-        <input
-          type="text"
-          name=""
-          id="find"
-          placeholder="Search books"
-          onkeyup="search()"
-        />
-      </form>
-    </div>
-    <div class="navbar-right">
-      <ul>
-        <li>
-          <a href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a>
-        </li>
-        <li><a href="/user/orders">Orders</a></li>
-        <li><a href="/books">Reviews</a></li>
-        
-        <li><a href="/logout">Log Out</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-
-<style>
-  /* Style for the subcategories dropdown */
-
-
-  nav {
-    background-color: #605151;
-    padding: 25px;
-    text-align: center;
-  }
-
-  .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-/* ... (existing styles) ... */
-
-.navbar-left ul li {
-  position: relative;
-}
-
-.has-dropdown .dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #555;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-radius: 5px;
-}
-
-.has-dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-.dropdown-menu li {
-  padding: 10px;
-}
-
-.dropdown-menu li a {
-  color: #fff;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-menu li a:hover {
-  background-color: #777;
-}
-  .navbar-right ul {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .navbar-middle form {
-    display: flex;
-    align-items: center;
-    border: 2px solid #605151;
-    border-radius: 10px;
-    background-color: #fff;
-    padding: 5px;
-  }
-
-  .navbar-middle input[type="text"] {
-    padding: 10px;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    border-radius: 10px;
-    width: 300px;
-    font-size: 18px;
-    background-color: transparent;
-    color: black;
-  }
-
-  li {
-    display: inline;
-    margin-right: 10px;
-  }
-
-  li a {
-    text-decoration: none;
-    color: #fff0f0;
-    font-size: 18px;
-    padding: 10px 20px;
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
-  }
-
-  li a:hover {
-    background-color: #888888;
-    color: #ffffff;
-  }
-
-  .fa-shopping-cart {
-    margin-right: 13px;
-  }
-</style>
-
+<%- include('../../partials/user-navbar') %>
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -205,7 +50,7 @@
 
 <style>
   body {
-    background-color: #f4e5d0;
+    background-color: #fff;
   }
   /* CSS for the product container */
   .product {
@@ -213,9 +58,10 @@
     border-radius: 5px;
     padding: 10px;
     margin: 10px;
-    width: 300px;
+    width: 220px;
+    height: 360px; /* Equal height and width to make the card square */
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #f4e5d0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
@@ -236,7 +82,7 @@
   /* CSS for the product image */
   .product img {
     width: 100%;
-    height: auto;
+    height: 70%;
     border-radius: 5px;
     margin-bottom: 10px;
   }
@@ -264,3 +110,5 @@
     background-color: #45a049;
   }
 </style>
+
+<%- include('../../partials/footer') %>

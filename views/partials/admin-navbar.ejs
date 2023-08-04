@@ -1,37 +1,54 @@
 <nav>
-    <div class="navbar-container">
-      <div class="navbar-left">
-       
-        <ul>
-          <li><a href="/admin">Book Store</a></li> 
-          <li><a href="/category">Category</a></li>
-        </ul>
-      </div>
-      <div class="navbar-middle">
-        <form action="/search" method="GET">
-          <input type="text" name="query" placeholder="Search books">
-          <button type="submit"><i class="fas fa-search"></i></button>
-        </form>
-      </div>
-      <div class="navbar-right">
-        <ul>
-          <li><a href="/admin/products"> Manage Products</a></li>
-          <li><a href="/admin/orders"> Manage Orders</a></li>
-          <li><a href="/logout">Log Out</a></li>
-        </ul>
-      </div>
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <ul>
+        <li><a href="/admin">Book Store</a></li>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        />
+        <li class="has-dropdown">
+          <a href="/category">Categories</a>
+          <ul class="dropdown-menu">
+            <li><a href="/category/Fiction">Fiction</a></li>
+            <li><a href="/category/Novel">Novel</a></li>
+            <li><a href="/category/Scientific">Scientific</a></li>
+            <li><a href="/category/Mystery">Mystery</a></li>
+            <li><a href="/category/History">History</a></li>
+            <li><a href="/category/Uncategorized">Uncategorized</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
-  </nav>
-  
-  
-    
-    <style>
-      nav {
+    <div class="navbar-middle">
+      <form action="/admin" method="GET">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          name=""
+          id="find"
+          placeholder="Search books"
+          onkeyup="search()"
+        />
+      </form>
+    </div>
+    <div class="navbar-right">
+      <ul>
+        <li><a href="/admin/products"> Manage Products</a></li>
+        <li><a href="/admin/orders"> Manage Orders</a></li>
+        <li><a href="/logout">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<style>
+  nav {
     background-color: #605151;
     padding: 25px;
     text-align: center;
   }
-  
+
   .navbar-container {
     display: flex;
     justify-content: space-between;
@@ -39,20 +56,55 @@
     max-width: 1200px;
     margin: 0 auto;
   }
-  
-  .navbar-left ul,
+
+  /* ... (existing styles) ... */
+
+  .navbar-left ul li {
+    position: relative;
+  }
+
+  .has-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #555;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+  }
+
+  .has-dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu li {
+    padding: 10px;
+  }
+
+  .dropdown-menu li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-menu li a:hover {
+    background-color: #777;
+  }
+
   .navbar-right ul {
     display: flex;
     list-style-type: none;
     margin: 0;
     padding: 0;
   }
-  
+
   .navbar-middle form {
     display: flex;
     align-items: center;
   }
-  
+
   .navbar-middle input[type="text"] {
     padding: 10px;
     border: none;
@@ -60,19 +112,19 @@
     width: 300px;
     font-size: 18px;
   }
-  
+
   .navbar-middle button {
     padding: 10px;
     border: none;
     background-color: transparent;
     cursor: pointer;
   }
-  
+
   li {
     display: inline;
     margin-right: 10px;
   }
-  
+
   li a {
     text-decoration: none;
     color: #fff0f0;
@@ -81,18 +133,13 @@
     border-radius: 10px;
     transition: background-color 0.3s ease;
   }
-  
+
   li a:hover {
     background-color: #888888;
     color: #ffffff;
   }
-  
+
   .fa-shopping-cart {
     margin-right: 13px;
   }
-  
-  
-  
-    </style>
-   
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</style>

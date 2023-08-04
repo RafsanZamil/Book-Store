@@ -1,0 +1,90 @@
+<!-- views/user-orders.ejs -->
+<%- include('../../partials/user-navbar') %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Orders</title>
+  </head>
+  <body>
+    <h1>My Orders</h1>
+    <% if (orders.length > 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Items</th>
+          <th>Total Price</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach((order) => { %>
+        <tr>
+          <td><%= order._id %></td>
+          <td><%= order.name %></td>
+          <td><%= order.email %></td>
+          <td><%= order.address %></td>
+          <td>
+            <ul>
+              <% order.items.forEach((item) => { %>
+              <li><%= item.name %> - <%= item.price %></li>
+              <% }) %>
+            </ul>
+          </td>
+          <td><%= order.totalPrice %></td>
+          <td><%= order.status %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <% } else { %>
+    <p>No orders found.</p>
+    <% } %>
+  </body>
+</html>
+
+<style>
+  /* views/user-orders.css */
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 16px;
+    font-weight: bold;
+    color: #777;
+  }
+</style>
