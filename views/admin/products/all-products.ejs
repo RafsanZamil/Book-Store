@@ -3,15 +3,6 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
 />
-
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-/>
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-/>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,7 +13,7 @@
     <!-- Adjust the path to your CSS file -->
   </head>
   <body>
-    <h1>All Products</h1>
+    <h1>All Books</h1>
     <div class="product-container">
       <% products.forEach(product => { %>
       <div class="product">
@@ -31,19 +22,21 @@
         <p>Price: $<%= product.price %></p>
         <img src="<%= product.image.path %>" alt="Product Image" />
 
-        <a href="/user/products/<%= product._id %>">View Details</a>
+        <!-- <a href="/user/products/<%= product._id %>">View Details</a> -->
       </div>
       <% }) %>
     </div>
-
     <script type="text/javascript">
       function search() {
         let filter = document.getElementById("find").value.toUpperCase();
+
         let item = document.querySelectorAll(".product");
+
         let l = document.getElementsByTagName("h2");
         for (var i = 0; i <= l.length; i++) {
           let a = item[i].getElementsByTagName("h2")[0];
           let value = a.innerHTML || a.innerText || a.textContent;
+
           if (value.toUpperCase().indexOf(filter) > -1) {
             item[i].style.display = "";
           } else {
@@ -57,7 +50,7 @@
 
 <style>
   body {
-    background-color: #f4e5d0;
+    background-color: #fff;
   }
   /* CSS for the product container */
   .product {
@@ -65,9 +58,10 @@
     border-radius: 5px;
     padding: 10px;
     margin: 10px;
-    width: 300px;
+    width: 220px;
+    height: 360px; /* Equal height and width to make the card square */
     text-align: center;
-    background-color: #f8f2ec;
+    background-color: #f4e5d0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
@@ -88,7 +82,7 @@
   /* CSS for the product image */
   .product img {
     width: 100%;
-    height: auto;
+    height: 70%;
     border-radius: 5px;
     margin-bottom: 10px;
   }
@@ -116,5 +110,4 @@
     background-color: #45a049;
   }
 </style>
-
 <%- include('../../partials/footer') %>

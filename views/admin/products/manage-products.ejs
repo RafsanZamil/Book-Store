@@ -39,6 +39,7 @@
           <option value="Mystery">Mystery</option>
           <option value="Uncategorized">Uncategorized</option>
         </select>
+
         <button type="button" onclick="deleteBooksByGenre()">
           Delete Genre Books
         </button>
@@ -46,6 +47,77 @@
       <button class="add-product" onclick="redirectToNewProduct()">
         Add Product
       </button>
+
+      <form
+        action="/admin/products/update"
+        method="POST"
+        id="updateForm"
+        class="form-group"
+      >
+        <label for="selectedProducts">Select Products to Update:</label>
+        <select
+          id="selectedProducts"
+          name="selectedProducts[]"
+          multiple
+          required
+        >
+          <% products.forEach((product) => { %>
+          <option value="<%= product._id %>"><%= product.title %></option>
+          <% }); %>
+        </select>
+        <label for="updateType">Update Type:</label>
+        <select id="updateType" name="updateType" required>
+          <option value="featured">Featured</option>
+          <option value="topSelling">Top Selling</option>
+        </select>
+        <button type="button" onclick="updateProducts()">
+          Update Products
+        </button>
+      </form>
+
+      <script>
+        async function updateProducts() {
+          const selectedProducts = Array.from(
+            document.querySelectorAll("#selectedProducts option:checked")
+          ).map((option) => option.value);
+
+          const updateType = document.getElementById("updateType").value;
+
+          if (!selectedProducts.length) {
+            alert("Please select at least one product to update.");
+            return;
+          }
+
+          if (!updateType) {
+            alert("Please select an update type (Featured or Top Selling).");
+            return;
+          }
+
+          try {
+            const response = await fetch("/admin/products/update", {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                productIds: selectedProducts,
+                updateType,
+              }),
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              alert(data.message); // Show success message
+              // Optionally, you can reload the page or update the UI to reflect the changes.
+            } else {
+              const errorData = await response.json();
+              alert("Error updating products: " + errorData.error);
+            }
+          } catch (error) {
+            alert("An error occurred: " + error.message);
+          }
+        }
+      </script>
     </div>
 
     <!-- ... (existing code) ... -->
@@ -58,7 +130,7 @@
         <p>Price: $<%= product.price %></p>
         <p>Genre: <%= product.genre %></p>
         <img src="<%= product.image.path %>" alt="Product Image" />
-        <a href="/admin/products/<%= product._id %>/update">View and Edit</a>
+
         <form
           action="/admin/products/<%= product._id %>"
           method="POST"

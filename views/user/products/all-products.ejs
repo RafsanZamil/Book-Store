@@ -13,6 +13,138 @@
     <!-- Adjust the path to your CSS file -->
   </head>
   <body>
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Home Page</title>
+      </head>
+      <body>
+        <h1>Welcome to our store!</h1>
+
+        <h2>Featured Products</h2>
+        <% if (featuredProducts.length === 0) { %>
+        <p>No featured products available.</p>
+        <% } else { %>
+        <ul class="product-list">
+          <% featuredProducts.forEach(product => { %>
+          <li class="product-item">
+            <h3><%= product.title %></h3>
+            <p><%= product.summary %></p>
+            <p class="price">Price: $<%= product.price %></p>
+            <!-- Display image if available -->
+            <% if (product.image && product.image.path) { %>
+            <img src="<%= product.image.path %>" alt="<%= product.title %>" />
+            <% } %>
+            <a
+              href="/user/products/<%= product._id %>"
+              class="view-details-button"
+              >View Details</a
+            >
+          </li>
+          <% }); %>
+        </ul>
+        <% } %>
+
+        <h2>Top Selling Products</h2>
+        <% if (topSellingProducts.length === 0) { %>
+        <p>No top-selling products available.</p>
+        <% } else { %>
+        <ul class="product-list">
+          <% topSellingProducts.forEach(product => { %>
+          <li class="product-item">
+            <h3><%= product.title %></h3>
+            <p><%= product.summary %></p>
+            <p class="price">Price: $<%= product.price %></p>
+            <!-- Display image if available -->
+            <% if (product.image && product.image.path) { %>
+            <img src="<%= product.image.path %>" alt="<%= product.title %>" />
+            <% } %>
+            <a
+              href="/user/products/<%= product._id %>"
+              class="view-details-button"
+              >View Details</a
+            >
+          </li>
+          <% }); %>
+        </ul>
+        <% } %>
+      </body>
+    </html>
+    <style>
+      /* Featured and Top Selling Products */
+      h2 {
+        font-size: 24px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+      }
+
+      .product-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .product-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 200px;
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease;
+      }
+
+      .product-item:hover {
+        background-color: #e0e0e0;
+        cursor: pointer;
+      }
+
+      .product-item img {
+        width: 100px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+
+      .product-item h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+
+      .product-item p {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .product-item p.price {
+        font-weight: bold;
+      }
+
+      /* View Details Button */
+      .view-details-button {
+        display: inline-block;
+        background-color: #4caf50;
+        color: white;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      .view-details-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+
     <h1>All Books</h1>
     <div class="product-container">
       <% products.forEach(product => { %>
@@ -106,8 +238,15 @@
   }
 
   /* Change link color on hover */
+  .product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
   .product a:hover {
     background-color: #45a049;
+    transform: translateY(-2px);
   }
 </style>
 

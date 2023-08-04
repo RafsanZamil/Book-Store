@@ -76,9 +76,9 @@ passport.use(
   )
 );
 
-app.get("/", function (req, res) {
-  res.render("home");
-});
+// app.get("/", function (req, res) {
+//   res.render("home");
+// });
 app.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile"] })
@@ -94,16 +94,60 @@ app.get(
 );
 
 //user Routes
+app.get("/", async (req, res) => {
+  try {
+    // Find featured products
+    const featuredProducts = await Product.find({ featured: true }).exec();
+
+    // Find top-selling products
+    const topSellingProducts = await Product.find({ topSelling: true }).exec();
+
+    // Render the home page and pass the data to the template
+    res.render("home", { featuredProducts, topSellingProducts });
+  } catch (err) {
+    console.error("Error retrieving products:", err);
+    res.status(500).send("Error retrieving products.");
+  }
+});
 app.get("/login", function (req, res) {
   res.render("login");
 });
 app.get("/register", function (req, res) {
   res.render("register");
 });
+// app.get("/user", function (req, res) {
+//   Product.find().then(function (products) {
+//     res.render("user/products/all-products", { products });
+//   });
+// });
+
 app.get("/user", function (req, res) {
-  Product.find().then(function (products) {
-    res.render("user/products/all-products", { products });
-  });
+  // Fetch all products
+  const allProductsPromise = Product.find().exec();
+
+  // Fetch featured products
+  const featuredProductsPromise = Product.find({ featured: true }).exec();
+
+  // Fetch top-selling products
+  const topSellingProductsPromise = Product.find({ topSelling: true }).exec();
+
+  // Execute all promises
+  Promise.all([
+    allProductsPromise,
+    featuredProductsPromise,
+    topSellingProductsPromise,
+  ])
+    .then(([products, featuredProducts, topSellingProducts]) => {
+      res.render("user/products/all-products", {
+        products,
+        featuredProducts,
+        topSellingProducts,
+      });
+    })
+    .catch((err) => {
+      console.error("Error fetching products:", err);
+      res.status(500).send("Server Error");
+    });
 });
 app.post("/register", function (req, res) {
   User.register(
@@ -245,7 +289,7 @@ const createNewProduct = async (req, res) => {
 app.post("/admin/products/new", upload.single("image"), createNewProduct);
 
 //user view product details
-app.get("/user/products/:id", function (req, res) {
+app.get("/user/products/:id", isLoggedIn, function (req, res) {
   Product.findById(req.params.id).then(function (product) {
     res.render("user/products/product-details", { product });
   });
@@ -336,6 +380,24 @@ app.delete("/admin/category/delete/:genre", isAdmin, async (req, res) => {
   }
 });
 
+// featured and topselling
+app.put("/admin/products/update", async (req, res) => {
+  const { productIds, updateType } = req.body;
+
+  try {
+    // Update the products to set the corresponding category flag (e.g., featured, topSelling)
+    await Product.updateMany(
+      { _id: { $in: productIds } },
+      { [updateType]: true }
+    );
+
+    res.json({
+      message: `Products updated to ${updateType} category successfully.`,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update products." });
+  }
+});
 //cart routes
 
 app.get("/cart", function (req, res) {
