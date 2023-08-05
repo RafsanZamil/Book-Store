@@ -20,7 +20,10 @@ body {
 
 h1 {
   text-align: center;
-  margin-top: 20px;
+  margin: 30px 0;
+  color: #fff;
+  font-size: 2em; /* Customize the font size */
+  text-transform: uppercase; /* Convert text to uppercase */
 }
 
 .product-container {
@@ -99,7 +102,7 @@ h1 {
   margin: 0 auto;
   padding: 20px;
   text-align: center;
-  background-color: #bc8f8f;
+  background-color: #ccc;
 }
 
 .product-details h1 {
@@ -168,16 +171,9 @@ form {
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
-}
+  background: linear-gradient(to right, #757f9a, #d7dde8);
 
-h1 {
-  text-align: center;
-  padding: 20px 0;
-  background-color: #888888;
-  color: #fff;
-  margin-bottom: 30px;
+  color: #333;
 }
 
 form {

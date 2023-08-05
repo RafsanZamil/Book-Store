@@ -513,7 +513,8 @@ app.post("/checkout", async (req, res) => {
       email: req.body.email,
       address: req.body.address,
       items: req.body.cartItems, // Assuming you have a proper field to store the cart items in the Order model.
-      totalPrice: req.body.totalPrice, // Assuming you have a proper field to store the total price in the Order model.
+      totalPrice: req.body.totalPrice,
+      createdAt: req.body.createdAt, // Assuming you have a proper field to store the total price in the Order model.
     });
 
     // Save the order in the database
@@ -532,7 +533,7 @@ app.post("/checkout", async (req, res) => {
 });
 
 //order routes
-app.get("/admin/orders", async (req, res) => {
+app.get("/admin/orders", isAdmin, async (req, res) => {
   try {
     const orders = await Order.find().populate("items");
     res.render("admin/orders/admin-orders", { orders });
@@ -542,7 +543,7 @@ app.get("/admin/orders", async (req, res) => {
 });
 
 // Route to update the status of an order
-app.post("/admin/orders/:orderId/update", async (req, res) => {
+app.post("/admin/orders/:orderId/update", isAdmin, async (req, res) => {
   const { orderId } = req.params;
   const { status } = req.body;
   try {
@@ -554,6 +555,25 @@ app.post("/admin/orders/:orderId/update", async (req, res) => {
 });
 app.get("/orders", async (req, res) => {
   res.render("orders");
+});
+
+app.post("/admin/orders/:orderId/delete", isAdmin, async (req, res) => {
+  const orderId = req.params.orderId;
+
+  try {
+    // Find the order by its ID and delete it
+    const deletedOrder = await Order.findByIdAndRemove(orderId);
+
+    if (deletedOrder) {
+      console.log("Deleted order:", deletedOrder);
+      res.redirect("/admin/orders"); // Redirect back to the orders page after deletion
+    } else {
+      res.status(404).send("Order not found");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // Route to get user-specific orders
@@ -571,28 +591,6 @@ app.get("/user/orders", async (req, res) => {
   }
 });
 
-// Route to update the status of a user-specific order
-// app.post("/user/orders/:orderId/update", async (req, res) => {
-//   if (!req.isAuthenticated()) {
-//     return res.redirect("/login"); // Redirect to login page if not logged in
-//   }
-
-//   const { orderId } = req.params;
-//   const { status } = req.body;
-//   try {
-//     const userId = req.user._id;
-//     const order = await Order.findOneAndUpdate(
-//       { _id: orderId, userId },
-//       { status }
-//     );
-//     if (!order) {
-//       return res.status(404).send("Order not found");
-//     }
-//     res.redirect("/user/orders");
-//   } catch (err) {
-//     res.status(500).send("Error updating order status");
-//   }
-// });
 //category routes
 
 app.get("/category", isLoggedIn, async (req, res) => {

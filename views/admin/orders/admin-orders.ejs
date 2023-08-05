@@ -7,6 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #757f9a, #d7dde8);
     }
 
     h1 {
@@ -63,7 +64,7 @@
   <table>
     <thead>
       <tr>
-        <th>Order ID</th>
+        <!-- <th>Order ID</th> -->
         <th>Name</th>
         <th>Email</th>
         <th>Address</th>
@@ -71,25 +72,34 @@
         <th>Total Price</th>
         <th>Status</th>
         <th>Change Status</th>
+        <th>Date</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
       <% orders.forEach((order) => { %>
         <tr>
-          <td><%= order._id %></td>
+          <!-- <td><%= order._id %></td> -->
           <td><%= order.name %></td>
           <td><%= order.email %></td>
           <td><%= order.address %></td>
           <td><%= order.items%></td>
-          <!-- <td>
-            < <ul>
-              <% order.items.forEach((item) => { %>
-                <li><%= item.name %> - <%= item.price %></li>
-              <% }) %>
-            </ul> 
-          </td> -->
+          
+          </td>
+          <!-- show order items -->
+
+          <ul>
+            <% orders.forEach((order) => { %>
+              <li>
+                <!-- Assuming you have a property 'name' in the Cart schema -->
+                <%= order.items.Array%>
+                
+              </li>
+            <% }) %>
+          </ul>
           <td><%= order.totalPrice %></td>
           <td><%= order.status %></td>
+          
           <td>
             <form action="/admin/orders/<%= order._id %>/update" method="post">
               <select name="status">
@@ -97,6 +107,12 @@
                 <option value="delivered" <% if (order.status === "delivered") { %> selected <% } %>>Delivered</option>
               </select>
               <button type="submit">Update</button>
+            </form>
+          </td>
+          <td><%= order.createdAt.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true }) %></td>
+          <td>
+            <form action="/admin/orders/<%= order._id %>/delete" method="post">
+              <button type="submit">Delete</button>
             </form>
           </td>
         </tr>

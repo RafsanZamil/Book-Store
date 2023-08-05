@@ -1,3 +1,4 @@
+<%- include('partials/navbar') %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -29,7 +30,7 @@
     font-family: Arial, sans-serif;
     margin: 20px;
     padding: 0;
-    background-color: #f2f2f2;
+    background: linear-gradient(to right, #757f9a, #d7dde8);
   }
 
   h1 {
@@ -45,15 +46,67 @@
   }
 
   .product {
-    background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     margin: 10px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 220px;
+    height: 360px; /* Equal height and width to make the card square */
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  /* CSS for the product title */
+  .product h2 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: #333;
   }
 
+  /* CSS for the product price */
+  .product p {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  /* CSS for the product image */
+  .product img {
+    width: 100%;
+    height: 70%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  /* CSS for the product summary */
+  .product p.summary {
+    font-size: 1em;
+    color: #777;
+    margin-bottom: 15px;
+  }
+
+  .product a {
+    display: inline-block;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  /* Change link color on hover */
+  .product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .product a:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+  }
   h2 {
     margin: 0;
     color: #007bff;
@@ -72,16 +125,12 @@
   a {
     display: block;
     text-align: center;
-    background-color: #007bff;
+
     color: #fff;
     text-decoration: none;
     padding: 8px 16px;
     border-radius: 5px;
     transition: background-color 0.2s ease-in-out;
-  }
-
-  a:hover {
-    background-color: #0056b3;
   }
 
   /* Add more styles as needed */

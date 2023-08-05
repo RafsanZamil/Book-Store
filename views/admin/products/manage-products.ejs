@@ -19,7 +19,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product List</title>
-    <link rel="stylesheet" href="/css/style.css" />
+
     <!-- Adjust the path to your CSS file -->
   </head>
   <body>
@@ -137,7 +137,7 @@
           style="display: inline"
         >
           <input type="hidden" name="_method" value="DELETE" />
-          <button type="submit">Delete</button>
+          <button type="submit" class="delete-button">Delete</button>
         </form>
       </div>
       <% }) %>
@@ -198,15 +198,110 @@
   }
 </script>
 <style>
-  body {
-    background-color: #f4e5d0;
+  /* Reset default margin and padding for all elements */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-  /* CSS for the product container */
-  /* ... (existing styles) ... */
 
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #757f9a, #d7dde8);
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 30px 0;
+    color: #333;
+  }
+
+  p {
+    text-align: center;
+    font-size: 18px;
+    margin: 20px 0;
+    color: #666;
+  }
+
+  a {
+    display: block;
+    text-align: center;
+    margin: 40px 0;
+    text-decoration: none;
+    color: #007bff;
+  }
+
+  a:hover {
+    color: #0056b3;
+  }
+
+  /* Styling for the "All Books" heading */
+  .product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .product {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 25px;
+    width: 220px;
+    height: 360px; /* Equal height and width to make the card square */
+    text-align: center;
+    background-color: white;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .product h2 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .product p {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  .product img {
+    width: 100%;
+    height: 70%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  .product a {
+    display: inline-block;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  .product a:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+  }
+
+  /* Styling for the action containers */
   .action-containers {
     display: flex;
-    justify-content: center; /* Center the buttons horizontally */
+    justify-content: center;
     align-items: center;
     margin-bottom: 20px;
   }
@@ -272,65 +367,19 @@
   .add-product:hover {
     background-color: #45a049;
   }
-
-  /* ... (existing styles) ... */
-
-  /* ... (existing styles) ... */
-
-  .product {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
-    width: 300px;
-    text-align: center;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  /* CSS for the product title */
-  .product h2 {
-    font-size: 1.4em;
-    margin-bottom: 10px;
-    color: #333;
-  }
-
-  /* CSS for the product price */
-  .product p {
-    font-size: 1.2em;
-    color: #555;
-    margin-bottom: 5px;
-  }
-
-  /* CSS for the product image */
-  .product img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-
-  /* CSS for the product summary */
-  .product p.summary {
-    font-size: 1em;
-    color: #777;
-    margin-bottom: 15px;
-  }
-
-  .product a {
-    display: inline-block;
-    background-color: #4caf50;
+  .delete-button {
+    padding: 6px 12px; /* Adjust the padding to make the button smaller */
+    font-size: 0.9em; /* Adjust the font size if necessary */
+    background-color: #ff0000; /* Customize the background color for the delete button */
     color: white;
-    text-decoration: none;
-    padding: 8px 16px;
+    border: none;
     border-radius: 5px;
     font-weight: bold;
     transition: background-color 0.2s ease-in-out;
   }
 
-  /* Change link color on hover */
-  .product a:hover {
-    background-color: #45a049;
+  .delete-button:hover {
+    background-color: #cc0000; /* Change the background color on hover */
   }
 </style>
 <%- include('../../partials/footer') %>
