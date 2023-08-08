@@ -7,6 +7,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const User = require("./models/user.model");
 const Product = require("./models/product.model");
+
+
 const Cart = require("./models/cart.model");
 const Order = require("./models/order.model");
 require("./config/db");
@@ -608,9 +610,9 @@ app.get("/category/:genre", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-// Route to save orders by user ID
 
-// Route to handle the order placement after checkout
+
+
 
 // route not found error
 app.use((req, res, next) => {
