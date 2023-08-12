@@ -437,22 +437,55 @@ app.post("/cart/add/:id", function (req, res) {
         throw new Error("Product not found"); // Throw an error if the product is not found.
       }
 
-      const cart = new Cart({
-        userEmail: req.user._id,
-        item: product.title,
-        totalPrice: product.price,
-      });
-      return cart.save();
-    })
-    .then(function () {
-      res.redirect("/cart");
-      console.log("added");
+      Cart.findOneAndUpdate(
+        { userEmail: req.user._id, item: product.title },
+        { $inc: { quantity: 1, totalPrice: product.price } },
+        { upsert: true, new: true }
+      )
+        .then(function () {
+          res.redirect("/cart");
+          console.log("added");
+        })
+        .catch(function (error) {
+          // Handle the error here. You can redirect to an error page or render an error view.
+          res.render("error", { error: error.message });
+        });
     })
     .catch(function (error) {
       // Handle the error here. You can redirect to an error page or render an error view.
-      res.render("error", { error: error.message }); // Assuming you have an error.ejs view for displaying errors.
+      res.render("error", { error: error.message });
     });
 });
+
+
+// Update quantity of a cart item
+app.post("/cart/update/:id", function (req, res) {
+  const itemId = req.params.id;
+  const newQuantity = parseInt(req.body.quantity);
+
+  Cart.findById(itemId)
+    .then(function (cartItem) {
+      if (!cartItem) {
+        throw new Error("Cart item not found");
+      }
+
+      // Update the cart item's quantity and total price based on the new quantity
+      const oldQuantity = cartItem.totalQuantity;
+      cartItem.totalQuantity = newQuantity;
+      cartItem.totalPrice = (cartItem.totalPrice / oldQuantity) * newQuantity;
+
+      return cartItem.save(); // Save the updated cart item
+    })
+    .then(function () {
+      res.redirect("/cart");
+    })
+    .catch(function (error) {
+      // Handle the error here
+      res.render("error", { error: error.message });
+    });
+});
+
+
 // Add the route for removing items from the cart
 app.post("/cart/remove/:id", function (req, res) {
   // Find the cart item with the given ID and the user's email.
@@ -586,7 +619,7 @@ app.get("/user/orders", async (req, res) => {
 
   try {
     const userId = req.user._id;
-    const orders = await Order.find({ user: userId }).populate("items");
+    const orders = await Order.find({ user: userId }).populate("items.item");
     res.render("user/orders/user-order", { orders });
   } catch (err) {
     res.status(500).send("Error retrieving orders");
