@@ -29,12 +29,12 @@
 
     <input type="hidden" name="totalPrice" value="<%= totalPrice %>" />
     <% for (const cartItem of cartItems) { %>
-    <input type="hidden" name="cartItems[]" value="<%= cartItem._id %>" />
-    <% } %> 
+      <input type="hidden" name="cartItems[]" value="<%= cartItem._id %>" />
+    <% } %>
     <% if (cartItems.length > 0) { %>
     <ul>
       <% for (const cartItem of cartItems) { %>
-      <li><%= cartItem.item %> - <%= cartItem.totalPrice %></li>
+      <li><%= cartItem.item %> -  Quantity: <%= cartItem.totalQuantity %> - Price: <%= cartItem.totalPrice %> .</li>
       <% } %>
     </ul>
     <p>Total Price: <%= totalPrice %></p>
