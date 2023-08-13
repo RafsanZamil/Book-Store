@@ -31,7 +31,7 @@
     <% for (const cartItem of cartItems) { %>
       <input type="hidden" name="cartItems[]" value="<%= cartItem._id %>" />
     <% } %>
-    <% if (cartItems.length > 0) { %>
+   <% if (cartItems.length > 0) { %>
     <ul>
       <% for (const cartItem of cartItems) { %>
       <li><%= cartItem.item %> -  Quantity: <%= cartItem.totalQuantity %> - Price: <%= cartItem.totalPrice %> .</li>
