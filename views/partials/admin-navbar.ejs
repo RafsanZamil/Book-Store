@@ -142,4 +142,104 @@
   .fa-shopping-cart {
     margin-right: 13px;
   }
+
+  nav {
+    background-color: #212121;
+    padding: 25px;
+    text-align: center;
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ... (existing styles) ... */
+
+  .navbar-left ul li {
+    position: relative;
+  }
+
+  .has-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #555;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+  }
+
+  .has-dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu li {
+    padding: 10px;
+  }
+
+  .dropdown-menu li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-menu li a:hover {
+    background-color: #777;
+  }
+
+  .navbar-right ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar-middle form {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-middle input[type="text"] {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 300px;
+    font-size: 18px;
+  }
+
+  .navbar-middle button {
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  li {
+    display: inline;
+    margin-right: 10px;
+  }
+
+  li a {
+    text-decoration: none;
+    color: #fff0f0;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  li a:hover {
+    background-color: #888888;
+    color: #ffffff;
+  }
+
+  .fa-shopping-cart {
+    margin-right: 13px;
+  }
 </style>

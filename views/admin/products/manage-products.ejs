@@ -1,4 +1,38 @@
-<%- include('../../partials/admin-navbar') %>
+<nav>
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <ul>
+        <li><a href="/admin">Book Store</a></li>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        />
+        
+          
+        </li>
+      </ul>
+    </div>
+    <div class="navbar-middle">
+      <form action="/admin" method="GET">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          name=""
+          id="find"
+          placeholder="Search books"
+          onkeyup="search()"
+        />
+      </form>
+    </div>
+    <div class="navbar-right">
+      <ul>
+        <li><a href="/admin/products"> Manage Products</a></li>
+        <li><a href="/admin/orders"> Manage Orders</a></li>
+        <li><a href="/logout">Log Out</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 <link
   rel="stylesheet"
@@ -25,10 +59,9 @@
   <body>
     <h1>All Books</h1>
 
-    <!-- ... (existing code) ... -->
-
     <div class="action-containers">
       <form action="" method="POST" id="deleteForm" class="form-group">
+        <button type="button" onclick="redirectupdate()">Update-Books</button>
         <label for="genreToDelete">Select Genre to Delete:</label>
         <select id="genreToDelete" name="genreToDelete" required>
           <option value="">Select a Genre</option>
@@ -44,11 +77,8 @@
           Delete Genre Books
         </button>
       </form>
-      <button class="add-product" onclick="redirectToNewProduct()">
-        Add Product
-      </button>
-
-      <form
+    </div>
+    <!-- <form
         action="/admin/products/update"
         method="POST"
         id="updateForm"
@@ -73,8 +103,8 @@
         <button type="button" onclick="updateProducts()">
           Update Products
         </button>
-      </form>
-
+      </form> -->
+    <!-- 
       <script>
         async function updateProducts() {
           const selectedProducts = Array.from(
@@ -107,8 +137,7 @@
 
             if (response.ok) {
               const data = await response.json();
-              alert(data.message); // Show success message
-              // Optionally, you can reload the page or update the UI to reflect the changes.
+              alert(data.message); 
             } else {
               const errorData = await response.json();
               alert("Error updating products: " + errorData.error);
@@ -118,9 +147,7 @@
           }
         }
       </script>
-    </div>
-
-    <!-- ... (existing code) ... -->
+    </div> -->
 
     <div class="product-container">
       <% products.forEach((product) => { %>
@@ -130,7 +157,7 @@
         <p>Price: $<%= product.price %></p>
         <p>Genre: <%= product.genre %></p>
         <img src="<%= product.image.path %>" alt="Product Image" />
-
+        <!-- 
         <form
           action="/admin/products/<%= product._id %>"
           method="POST"
@@ -138,7 +165,7 @@
         >
           <input type="hidden" name="_method" value="DELETE" />
           <button type="submit" class="delete-button">Delete</button>
-        </form>
+        </form> -->
       </div>
       <% }) %>
     </div>
@@ -195,6 +222,11 @@
   function redirectToNewProduct() {
     // Redirect to the "/admin/products/new" page to add a new product.
     window.location.href = "/admin/products/new";
+  }
+</script>
+<script>
+  function redirectupdate() {
+    window.location.href = "/manage";
   }
 </script>
 <style>
@@ -380,6 +412,106 @@
 
   .delete-button:hover {
     background-color: #cc0000; /* Change the background color on hover */
+  }
+
+  nav {
+    background-color: #212121;
+    padding: 25px;
+    text-align: center;
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ... (existing styles) ... */
+
+  .navbar-left ul li {
+    position: relative;
+  }
+
+  .has-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #555;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+  }
+
+  .has-dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu li {
+    padding: 10px;
+  }
+
+  .dropdown-menu li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-menu li a:hover {
+    background-color: #777;
+  }
+
+  .navbar-right ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar-middle form {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-middle input[type="text"] {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 300px;
+    font-size: 18px;
+  }
+
+  .navbar-middle button {
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  li {
+    display: inline;
+    margin-right: 10px;
+  }
+
+  li a {
+    text-decoration: none;
+    color: #fff0f0;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+
+  li a:hover {
+    background-color: #888888;
+    color: #ffffff;
+  }
+
+  .fa-shopping-cart {
+    margin-right: 13px;
   }
 </style>
 <%- include('../../partials/footer') %>

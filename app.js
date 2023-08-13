@@ -8,7 +8,6 @@ const bodyParser = require("body-parser");
 const User = require("./models/user.model");
 const Product = require("./models/product.model");
 
-
 const Cart = require("./models/cart.model");
 const Order = require("./models/order.model");
 require("./config/db");
@@ -98,6 +97,13 @@ app.get(
 //user Routes
 app.get("/", async (req, res) => {
   try {
+    const response = await fetch("https://zenquotes.io/api/random");
+    const data = await response.json();
+    const quote = {
+      text: data[0].q,
+      author: data[0].a,
+    };
+
     // Find featured products
     const featuredProducts = await Product.find({ featured: true }).exec();
 
@@ -105,7 +111,7 @@ app.get("/", async (req, res) => {
     const topSellingProducts = await Product.find({ topSelling: true }).exec();
 
     // Render the home page and pass the data to the template
-    res.render("home", { featuredProducts, topSellingProducts });
+    res.render("home", { quote, featuredProducts, topSellingProducts });
   } catch (err) {
     console.error("Error retrieving products:", err);
     res.status(500).send("Error retrieving products.");
@@ -315,6 +321,17 @@ app.get("/admin/products", isAdmin, function (req, res) {
     res.render("admin/products/manage-products", { products });
   });
 });
+
+app.get("/manage", isAdmin, async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.render("product-table", { products });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.render("error");
+  }
+});
+
 //admin add product
 app.get("/admin/products/new", isAdmin, function (req, res) {
   res.render("admin/products/new-product"); // Render the "add-product.ejs" template
@@ -327,13 +344,49 @@ app.get("/admin/products/:id", isAdmin, function (req, res) {
   });
 });
 //admin update product
-app.get("/admin/products/:id/update", function (req, res) {
-  Product.findById(req.params.id).then(function (product) {
-    res.render("admin/products/update-product", { product });
-  });
+
+app.post("/update", async (req, res) => {
+  const { productId, action } = req.body;
+
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
+
+    if (action === "featured") {
+      product.featured = !product.featured;
+    } else if (action === "topSelling") {
+      product.topSelling = !product.topSelling;
+    }
+
+    await product.save();
+    res.redirect("/manage"); // Redirect back to the product table
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.redirect("/error");
+  }
 });
+// app.get("/admin/products/:id/update", function (req, res) {
+//   Product.findById(req.params.id).then(function (product) {
+//     res.render("admin/products/update-product", { product });
+//   });
+// });
 
 //delete product
+app.post("/delete-product", async (req, res) => {
+  const productId = req.body.productId;
+
+  try {
+    await Product.findByIdAndDelete(productId);
+    res.redirect("/manage"); // Redirect back to the product table
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.redirect("/error");
+  }
+});
+
 // DELETE /admin/products/:id
 async function postDeleteProduct(req, res, next) {
   let product;
@@ -457,7 +510,6 @@ app.post("/cart/add/:id", function (req, res) {
     });
 });
 
-
 // Update quantity of a cart item
 app.post("/cart/update/:id", function (req, res) {
   const itemId = req.params.id;
@@ -484,7 +536,6 @@ app.post("/cart/update/:id", function (req, res) {
       res.render("error", { error: error.message });
     });
 });
-
 
 // Add the route for removing items from the cart
 app.post("/cart/remove/:id", function (req, res) {
@@ -643,9 +694,6 @@ app.get("/category/:genre", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
-
 
 // route not found error
 app.use((req, res, next) => {
