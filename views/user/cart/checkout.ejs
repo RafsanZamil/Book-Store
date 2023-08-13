@@ -34,7 +34,7 @@
     <% if (cartItems.length > 0) { %>
     <ul>
       <% for (const cartItem of cartItems) { %>
-      <li><%= cartItem.item %> -  Quantity: <%= cartItem.totalQuantity %> - Price: <%= cartItem.totalPrice %> .</li>
+      <li><%= cartItem.item %> - All Quantity: <%= cartItem.totalQuantity %> - Price: <%= cartItem.totalPrice %> .</li>
       <% } %>
     </ul>
     <p>Total Price: <%= totalPrice %></p>
