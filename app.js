@@ -486,6 +486,7 @@ app.post("/cart/update/:id", function (req, res) {
 });
 
 
+
 // Add the route for removing items from the cart
 app.post("/cart/remove/:id", function (req, res) {
   // Find the cart item with the given ID and the user's email.
