@@ -29,9 +29,9 @@
           <td><%= order.address %></td>
           <td>
             <ul>
-              <% order.items.forEach((item) => { %>
-              <li><%= item.name %> - <%= item.price %></li>
-              <% }) %>
+              <% for (const cartItem of order.items) { %>
+                <li><%= cartItem.item %> - Quantity: <%= cartItem.totalQuantity %> </li>
+              <% } %>
             </ul>
           </td>
           <td><%= order.totalPrice %></td>
