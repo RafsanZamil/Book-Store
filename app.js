@@ -619,7 +619,7 @@ app.get("/user/orders", async (req, res) => {
 
   try {
     const userId = req.user._id;
-    const orders = await Order.find({ user: userId }).populate("items.item");
+    const orders = await Order.find({ user: userId }).populate("items");
     res.render("user/orders/user-order", { orders });
   } catch (err) {
     res.status(500).send("Error retrieving orders");

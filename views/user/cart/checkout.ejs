@@ -31,17 +31,10 @@
     <% for (const cartItem of cartItems) { %>
       <input type="hidden" name="cartItems[]" value="<%= cartItem._id %>" />
     <% } %>
-<<<<<<< HEAD
     <% if (cartItems.length > 0) { %>
     <ul>
       <% for (const cartItem of cartItems) { %>
       <li><%= cartItem.item %> - All Quantity: <%= cartItem.totalQuantity %> - Price: <%= cartItem.totalPrice %> .</li>
-=======
-   <% if (cartItems.length > 0) { %>
-    <ul>
-      <% for (const cartItem of cartItems) { %>
-      <li><%= cartItem.item %> -  Quantity: <%= cartItem.totalQuantity %> - Price: <%= cartItem.totalPrice %> .</li>
->>>>>>> ad72caa26bd28fb61240a116ebea21aeba494da9
       <% } %>
     </ul>
     <p>Total Price: <%= totalPrice %></p>
