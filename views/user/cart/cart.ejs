@@ -72,14 +72,28 @@
       <% if (cartItems.length > 0) { %>
       <ul>
         <% for (const cartItem of cartItems) { %>
-        <li>
-          <span><%= cartItem.item %></span> -
-          <span>$<%= cartItem.totalPrice %></span>
-          <form action="/cart/remove/<%= cartItem._id %>" method="post">
-            <button type="submit" class="btn btn-danger">Remove</button>
-          </form>
-        </li>
-        <% } %>
+          <li>
+            <span><%= cartItem.item %></span> -
+            <span>Quantity: <%= cartItem.totalQuantity %></span> -
+            <span>$<%= cartItem.totalPrice %></span>
+            <form action="/cart/update/<%= cartItem._id %>" method="post">
+              <div class="form-group">
+                <input
+                  type="number"
+                  name="quantity"
+                  value="<%= cartItem.totalQuantity %>"
+                  min="1"
+                  class="form-control"
+                />
+              </div>
+              <button type="submit" class="btn btn-success">Update</button>
+            </form>
+            <form action="/cart/remove/<%= cartItem._id %>" method="post">
+              <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
+          </li>
+          <% } %>
+          
       </ul>
       <p>Total Price: $<%= totalPrice %></p>
       <a href="/checkout" class="btn btn-primary">Proceed to Checkout</a>
