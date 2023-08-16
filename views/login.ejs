@@ -18,6 +18,11 @@
             </div>
             <button type="submit" class="btn btn-dark">Login</button>
           </form>
+          <% if (typeof errorMessage !== 'undefined') { %>
+            <div class="alert alert-danger mt-3" role="alert">
+              <%= errorMessage %>
+            </div>
+            <% } %>
           <p>Don't have an account?</p>
           <a class="btn btn-light btn-lg" href="/register" role="button"
             >Register</a
@@ -26,20 +31,6 @@
       </div>
     </div>
 
-    <div class="col-sm-4">
-      <div class="card">
-        <div class="card-body">
-          <a
-            class="btn btn-block btn-social btn-google"
-            href="/auth/google"
-            role="button"
-          >
-            <i class="fab fa-google"></i>
-            Sign In with Google
-          </a>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 <!DOCTYPE html>

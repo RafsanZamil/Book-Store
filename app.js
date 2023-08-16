@@ -3,6 +3,7 @@ const cors = require("cors");
 const ejs = require("ejs");
 const multer = require("multer");
 const path = require("path");
+const axios = require("axios");
 
 const bodyParser = require("body-parser");
 const User = require("./models/user.model");
@@ -97,11 +98,11 @@ app.get(
 //user Routes
 app.get("/", async (req, res) => {
   try {
-    const response = await fetch("https://zenquotes.io/api/random");
-    const data = await response.json();
+    const response = await axios.get("https://zenquotes.io/api/random");
+  
     const quote = {
-      text: data[0].q,
-      author: data[0].a,
+      text: response.data[0].q,
+      author: response.data[0].a,
     };
 
     // Find featured products
@@ -163,38 +164,57 @@ app.post("/register", function (req, res) {
     req.body.password,
     function (err, user) {
       if (err) {
+        if (err.name === "UserExistsError") {
+          return res.render("register", {
+            errorMessage:
+              "A user with the given username is already registered.",
+          });
+        }
         console.log(err);
-        res.redirect("/register");
-      } else {
-        passport.authenticate("local")(req, res, function () {
-          res.redirect("/");
-        });
+        return res.redirect("/register");
       }
+      passport.authenticate("local")(req, res, function () {
+        res.redirect("/");
+      });
     }
   );
 });
-
-app.post("/login", function (req, res) {
+app.post("/login", function (req, res, next) {
   const user = new User({
     username: req.body.username,
     password: req.body.password,
   });
 
-  req.login(user, function (err) {
+  // Authenticate user
+  passport.authenticate("local", function (err, user, info) {
     if (err) {
       console.log(err);
-    } else {
-      passport.authenticate("local")(req, res, function () {
-        if (req.user.isAdmin) {
-          res.redirect("/admin");
-        } else {
-          res.redirect("/user");
-        }
+      return res.render("login", {
+        errorMessage: "Error logging in. Please try again.",
       });
     }
-  });
-});
 
+    if (!user) {
+      // Authentication failed, render the login page with an error message
+      return res.render("login", {
+        errorMessage: "Invalid username or password. Please try again.",
+      });
+    }
+
+    req.logIn(user, function (err) {
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+
+      if (user.isAdmin) {
+        res.redirect("/admin");
+      } else {
+        res.redirect("/user");
+      }
+    });
+  })(req, res, next);
+});
 //loggedin middlewared
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
