@@ -17,6 +17,7 @@
 
           <th>Price</th>
           <th>Genre</th>
+          <th>New-arrivals</th>
           <th>Featured</th>
           <th>Top Selling</th>
           <th>Update Products</th>
@@ -30,6 +31,7 @@
 
           <td><%= product.price %></td>
           <td><%= product.genre %></td>
+          <td><%=product.newArrival%></td>
           <td><%= product.featured %></td>
           <td><%= product.topSelling %></td>
           <td>
@@ -39,12 +41,16 @@
                 name="productId"
                 value="<%= product._id %>"
               />
+              <button type="submit" name="action" value="newArrival">
+                New-arrivals
+              </button>
               <button type="submit" name="action" value="featured">
                 Featured
               </button>
               <button type="submit" name="action" value="topSelling">
                 Top Selling
               </button>
+              
             </form>
           </td>
           <td>

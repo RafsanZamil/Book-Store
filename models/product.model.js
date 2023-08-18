@@ -26,6 +26,10 @@ const productSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  newArrival: {
+    type: Boolean,
+    default: false,
+  },
 
   image: {
     data: Buffer, // Store image data as a buffer

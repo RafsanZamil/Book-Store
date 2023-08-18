@@ -1,4 +1,5 @@
 <%- include('../../partials/user-navbar') %>
+<%- include('../../partials/second-navbar') %>
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -8,7 +9,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product List</title>
+    <title>All Books</title>
     <link rel="stylesheet" href="/css/style.css" />
     <!-- Adjust the path to your CSS file -->
   </head>
@@ -20,8 +21,29 @@
       </head>
       <body>
         <h1>Welcome to our store!</h1>
-
-        <h2>Featured Products</h2>
+        <h2 id="new-arrivals">New Arrivals</h2>
+        <% if (newArrivals.length === 0) { %>
+        <p>No new products available.</p>
+        <% } else { %>
+        <ul class="product-list">
+          <% newArrivals.forEach(product => { %>
+          <li class="product-item">
+            <h3><%= product.title %></h3>
+           
+            <p class="price">Price: $<%= product.price %></p>
+            <!-- Display image if available -->
+            <% if (product.image && product.image.path) { %>
+            <img src="<%= product.image.path %>" alt="<%= product.title %>" />
+            <% } %>
+            <a href="/user/products/<%= product._id %>" class="view-details-button"
+              >View Details</a
+            >
+          </li>
+          <% }); %>
+        </ul>
+        <% } %>
+    
+        <h2 id="featured-products">Featured Products</h2>
         <% if (featuredProducts.length === 0) { %>
         <p>No featured products available.</p>
         <% } else { %>
@@ -29,23 +51,20 @@
           <% featuredProducts.forEach(product => { %>
           <li class="product-item">
             <h3><%= product.title %></h3>
-            <p><%= product.summary %></p>
+            
             <p class="price">Price: $<%= product.price %></p>
             <!-- Display image if available -->
             <% if (product.image && product.image.path) { %>
             <img src="<%= product.image.path %>" alt="<%= product.title %>" />
             <% } %>
-            <a
-              href="/user/products/<%= product._id %>"
-              class="view-details-button"
+            <a href="/user/products/<%= product._id %>" class="view-details-button"
               >View Details</a
             >
           </li>
           <% }); %>
         </ul>
         <% } %>
-
-        <h2>Top Selling Products</h2>
+        <h2 id="top-selling-products">Top Selling Products</h2>
         <% if (topSellingProducts.length === 0) { %>
         <p>No top-selling products available.</p>
         <% } else { %>
@@ -53,15 +72,13 @@
           <% topSellingProducts.forEach(product => { %>
           <li class="product-item">
             <h3><%= product.title %></h3>
-            <p><%= product.summary %></p>
+            
             <p class="price">Price: $<%= product.price %></p>
             <!-- Display image if available -->
             <% if (product.image && product.image.path) { %>
             <img src="<%= product.image.path %>" alt="<%= product.title %>" />
             <% } %>
-            <a
-              href="/user/products/<%= product._id %>"
-              class="view-details-button"
+            <a href="/user/products/<%= product._id %>" class="view-details-button"
               >View Details</a
             >
           </li>
@@ -70,7 +87,18 @@
         <% } %>
       </body>
     </html>
+    </html>
     <style>
+       .section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    padding: 10px;
+    background-color: gray; /* Set the background color to gray */
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px 0; /* Add margin for spacing */
+  }
       /* Featured and Top Selling Products */
       h2 {
         font-size: 24px;
@@ -143,6 +171,8 @@
       .view-details-button:hover {
         background-color: #45a049;
       }
+
+    
     </style>
 
     <h1>All Books</h1>
@@ -199,14 +229,14 @@
 
   /* CSS for the product title */
   .product h2 {
-    font-size: 1.4em;
+    font-size: 1.2em;
     margin-bottom: 10px;
     color: #333;
   }
 
   /* CSS for the product price */
   .product p {
-    font-size: 1.2em;
+    font-size: 1em;
     color: #555;
     margin-bottom: 5px;
   }

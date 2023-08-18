@@ -15,7 +15,7 @@
           <th>Name</th>
           <th>Email</th>
           <th>Address</th>
-          <th>Items</th>
+          <!-- <th>Items</th> -->
           <th>Total Price</th>
           <th>Status</th>
         </tr>
@@ -27,13 +27,13 @@
           <td><%= order.name %></td>
           <td><%= order.email %></td>
           <td><%= order.address %></td>
-          <td>
+          <!-- <td>
             <ul>
               <% for (const cartItem of order.items) { %>
                 <li><%= cartItem.item %> - Quantity: <%= cartItem.totalQuantity %> </li>
               <% } %>
             </ul>
-          </td>
+          </td> -->
           <td><%= order.totalPrice %></td>
           <td><%= order.status %></td>
         </tr>

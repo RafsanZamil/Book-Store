@@ -106,13 +106,14 @@ app.get("/", async (req, res) => {
     };
 
     // Find featured products
+    const newArrivals = await Product.find({ newArrival: true }).exec();
     const featuredProducts = await Product.find({ featured: true }).exec();
 
     // Find top-selling products
     const topSellingProducts = await Product.find({ topSelling: true }).exec();
 
     // Render the home page and pass the data to the template
-    res.render("home", { quote, featuredProducts, topSellingProducts });
+    res.render("home", { quote,newArrivals, featuredProducts, topSellingProducts });
   } catch (err) {
     console.error("Error retrieving products:", err);
     res.status(500).send("Error retrieving products.");
@@ -136,6 +137,8 @@ app.get("/user", function (req, res) {
 
   // Fetch featured products
   const featuredProductsPromise = Product.find({ featured: true }).exec();
+  const newArrivalsPromise = Product.find({ newArrival: true }).exec();
+
 
   // Fetch top-selling products
   const topSellingProductsPromise = Product.find({ topSelling: true }).exec();
@@ -143,12 +146,15 @@ app.get("/user", function (req, res) {
   // Execute all promises
   Promise.all([
     allProductsPromise,
+    newArrivalsPromise,
     featuredProductsPromise,
     topSellingProductsPromise,
+
   ])
-    .then(([products, featuredProducts, topSellingProducts]) => {
+    .then(([products, newArrivals ,featuredProducts, topSellingProducts]) => {
       res.render("user/products/all-products", {
         products,
+        newArrivals,
         featuredProducts,
         topSellingProducts,
       });
@@ -375,7 +381,9 @@ app.post("/update", async (req, res) => {
       return res.status(404).send("Product not found");
     }
 
-    if (action === "featured") {
+    if (action === "newArrival") {
+      product.newArrival = !product.newArrival;
+    } else if (action === "featured") {
       product.featured = !product.featured;
     } else if (action === "topSelling") {
       product.topSelling = !product.topSelling;
